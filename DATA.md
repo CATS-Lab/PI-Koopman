@@ -33,11 +33,11 @@ Public tables retain trial-local ENU coordinates, headings, relative sample time
 and the motion channels above. Absolute GPS time, latitude/longitude, geographic
 ENU origins, and timestamp-bearing source identifiers are removed.
 
-The geometry and window-selection implementation is in `data/scripts/`.
+The geometry and window-selection implementation is in `src/pikoopman/data/`.
 For data owners with private synchronized parent tables, run:
 
 ```sh
-python scripts/rebuild_data.py --input /path/to/private/parents --output outputs/rebuilt_data
+python -m scripts.rebuild_data --input /path/to/private/parents --output outputs/rebuilt_data
 ```
 
 This runs the original geometry pipeline, then applies the public-field export.

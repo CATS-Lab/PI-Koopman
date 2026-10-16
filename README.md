@@ -33,8 +33,8 @@ git clone https://github.com/CATS-Lab/PI-Koopman.git
 cd PI-Koopman
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-python scripts/build_native.py
+python -m pip install -e .
+python -m scripts.build_native
 ```
 
 ## Quick Start
@@ -42,9 +42,9 @@ python scripts/build_native.py
 CATS-CF data are included in the repository:
 
 ```sh
-python scripts/verify_data.py
-python scripts/smoke_test.py
-python scripts/run_prediction.py --dataset local --budget 3 --rate 10 --origin 20
+python -m scripts.verify_data
+python -m scripts.smoke_test
+python -m experiments.run_prediction --dataset local --budget 3 --rate 10 --origin 20
 ```
 
 This fits CTH, IDM, and both PI models using 3 s of history at 10 Hz, then forecasts 5 s from a 20-s origin. Results are saved to `outputs/physics/grid/local_B3_Hz10_end20/`.
@@ -52,8 +52,8 @@ This fits CTH, IDM, and both PI models using 3 s of history at 10 Hz, then forec
 To prepare OpenACC:
 
 ```sh
-python scripts/download_openacc.py
-python scripts/prepare_openacc.py
+python -m scripts.download_openacc
+python -m scripts.prepare_openacc
 ```
 
 ## Reproduce the paper
@@ -61,8 +61,8 @@ python scripts/prepare_openacc.py
 **History duration:** 3/8/15-s histories at 10 Hz, followed by a 5-s forecast. Run all seven models and aggregate the results:
 
 ```sh
-python scripts/run_main.py --axis duration --dataset local --models all
-python scripts/summarize_prediction.py --axis duration --dataset local
+python -m experiments.run_main --axis duration --dataset local --models all
+python -m experiments.summarize_prediction --axis duration --dataset local
 ```
 
 Replace `local` with `openacc` for OpenACC. Use `--models physics` or `--models neural` to run model groups separately.
@@ -70,25 +70,36 @@ Replace `local` with `openacc` for OpenACC. Use `--models physics` or `--models 
 **Sampling rate:** CATS-CF, 8-s histories at 1/5/10/25/125 Hz, with forecast origins at 15/20/24 s:
 
 ```sh
-python scripts/run_main.py --axis rate --dataset local --models all
-python scripts/summarize_prediction.py --axis rate --dataset local
+python -m experiments.run_main --axis rate --dataset local --models all
+python -m experiments.summarize_prediction --axis rate --dataset local
 ```
 
 Summaries are written to `outputs/summaries/`. Full neural searches can take hours; for a compact training example:
 
 ```sh
-python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 --origin 20 --stage compact
+python -m experiments.neural_prediction --dataset local --budget 3 --rate 10 --origin 20 --stage compact
 ```
 
 | Experiment | Command |
 |---|---|
-| Known-law response-field reconstruction | `python experiments/synthetic_benchmark.py` |
-| Paired sampling-rate/noise consistency | `python experiments/claim_rate_consistency.py` |
-| ACC/manual recognition from PI residuals | `python experiments/run_pi_residual_recognition.py` |
-| Physical/PI timing | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
-| Neural timing | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
+| Known-law response-field reconstruction | `python -m experiments.synthetic_benchmark` |
+| Paired sampling-rate/noise consistency | `python -m experiments.rate_consistency` |
+| ACC/manual recognition from PI residuals | `python -m experiments.recognition` |
+| Physical/PI timing | `python -m experiments.timing_physics --label my-cpu --output outputs/timing_cpu` |
+| Neural timing | `python -m experiments.timing_neural --device cpu --label my-cpu --output outputs/timing_neural` |
 
 Grid settings: [configs/config.json](configs/config.json). `run_main.py` and `summarize_prediction.py` accept `--config PATH` to use another grid.
+
+## Repository layout
+
+All experiment results are written under `outputs/`.
+
+- `src/pikoopman/models/`: Physical, Koopman, and neural implementations
+- `src/pikoopman/training/`: Training and source-group model selection
+- `src/pikoopman/data/`: Data loading, geometry, window selection, and public export
+- `src/pikoopman/evaluation/`: Metrics and recognition helpers
+- `experiments/`: Paper experiment and aggregation entry points
+- `scripts/`: Native build, data preparation, and checks
 
 ## License
 

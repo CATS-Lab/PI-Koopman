@@ -33,8 +33,8 @@ git clone https://github.com/CATS-Lab/PI-Koopman.git
 cd PI-Koopman
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-python scripts/build_native.py
+python -m pip install -e .
+python -m scripts.build_native
 ```
 
 ## 快速开始
@@ -42,9 +42,9 @@ python scripts/build_native.py
 仓库已包含 CATS-CF 数据，直接执行：
 
 ```sh
-python scripts/verify_data.py
-python scripts/smoke_test.py
-python scripts/run_prediction.py --dataset local --budget 3 --rate 10 --origin 20
+python -m scripts.verify_data
+python -m scripts.smoke_test
+python -m experiments.run_prediction --dataset local --budget 3 --rate 10 --origin 20
 ```
 
 该示例使用 10 Hz、3 秒历史拟合 CTH、IDM 和两种 PI 模型，从第 20 秒起预测随后 5 秒。结果位于 `outputs/physics/grid/local_B3_Hz10_end20/`。
@@ -52,8 +52,8 @@ python scripts/run_prediction.py --dataset local --budget 3 --rate 10 --origin 2
 准备 OpenACC 数据：
 
 ```sh
-python scripts/download_openacc.py
-python scripts/prepare_openacc.py
+python -m scripts.download_openacc
+python -m scripts.prepare_openacc
 ```
 
 ## 复现论文实验
@@ -61,8 +61,8 @@ python scripts/prepare_openacc.py
 **历史时长比较**：使用 10 Hz、3/8/15 秒历史，预测随后 5 秒。运行全部七种模型并汇总：
 
 ```sh
-python scripts/run_main.py --axis duration --dataset local --models all
-python scripts/summarize_prediction.py --axis duration --dataset local
+python -m experiments.run_main --axis duration --dataset local --models all
+python -m experiments.summarize_prediction --axis duration --dataset local
 ```
 
 将 `local` 替换为 `openacc` 即可运行 OpenACC。可用 `--models physics` 或 `--models neural` 分别运行两组模型。
@@ -70,25 +70,36 @@ python scripts/summarize_prediction.py --axis duration --dataset local
 **采样率比较**：CATS-CF，8 秒历史，1/5/10/25/125 Hz，预测起点为第 15/20/24 秒：
 
 ```sh
-python scripts/run_main.py --axis rate --dataset local --models all
-python scripts/summarize_prediction.py --axis rate --dataset local
+python -m experiments.run_main --axis rate --dataset local --models all
+python -m experiments.summarize_prediction --axis rate --dataset local
 ```
 
 汇总结果位于 `outputs/summaries/`。完整神经搜索可能耗时数小时；紧凑训练示例：
 
 ```sh
-python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 --origin 20 --stage compact
+python -m experiments.neural_prediction --dataset local --budget 3 --rate 10 --origin 20 --stage compact
 ```
 
 | 实验 | 命令 |
 |---|---|
-| 已知律响应场重建 | `python experiments/synthetic_benchmark.py` |
-| 配对采样率／噪声一致性 | `python experiments/claim_rate_consistency.py` |
-| PI 残差的 ACC／人工跟驰识别 | `python experiments/run_pi_residual_recognition.py` |
-| 物理／PI 模型计时 | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
-| 神经模型计时 | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
+| 已知律响应场重建 | `python -m experiments.synthetic_benchmark` |
+| 配对采样率／噪声一致性 | `python -m experiments.rate_consistency` |
+| PI 残差的 ACC／人工跟驰识别 | `python -m experiments.recognition` |
+| 物理／PI 模型计时 | `python -m experiments.timing_physics --label my-cpu --output outputs/timing_cpu` |
+| 神经模型计时 | `python -m experiments.timing_neural --device cpu --label my-cpu --output outputs/timing_neural` |
 
 实验网格见 [configs/config.json](configs/config.json)。运行与汇总脚本均支持通过 `--config PATH` 指定另一套网格配置。
+
+## 仓库结构
+
+所有实验结果统一写入 `outputs/`。
+
+- `src/pikoopman/models/`: 物理、Koopman 和神经模型实现
+- `src/pikoopman/training/`: 训练与按来源分组的模型选择
+- `src/pikoopman/data/`: 数据加载、几何处理、窗口选择与公开导出
+- `src/pikoopman/evaluation/`: 评价指标与识别工具
+- `experiments/`: 论文实验与结果汇总入口
+- `scripts/`: 编译、数据准备与检查工具
 
 ## 许可
 

@@ -5,8 +5,6 @@ Compare the same quadratic dictionary across differentiation/integration choices
 
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from pathlib import Path
 import sys,json,hashlib,time
 import numpy as np
 import pandas as pd
@@ -14,7 +12,7 @@ from scipy.linalg import expm,logm
 from scipy.integrate import cumulative_trapezoid
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'results/synthetic';OUT.mkdir(parents=True,exist_ok=True)
+OUT=ROOT/'outputs/synthetic'
 
 def accel(q,nonlinear):
     s,v,d=np.moveaxis(np.asarray(q),-1,0);e=s-4-1.3*v
@@ -59,6 +57,7 @@ def regress(tracks,rate,method):
 
 
 def main():
+    OUT.mkdir(parents=True,exist_ok=True)
     start=time.perf_counter();rows=[]
     for nonlinear in [False,True]:
         truth=simulate(109+int(nonlinear),18,nonlinear)
