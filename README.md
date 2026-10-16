@@ -15,9 +15,9 @@ CLI names: `local` = CATS-CF; `openacc` = OpenACC.
 
 ## Installation
 
-Tested on **macOS arm64 (Python 3.12.14)** and **Linux x86_64 (Python 3.12.15)**, using CPU. A C99 compiler (`cc`, or set `CC`) is required. CUDA execution has not been tested.
+Runs on **macOS arm64 (Python 3.12.14)** and **Linux x86_64 (Python 3.12.15)**, using CPU. A C99 compiler (`cc`, or set `CC`) is required.
 
-| Dependency | Tested version |
+| Dependency | Version |
 |---|---|
 | NumPy | 2.5.3 |
 | SciPy | 1.18.1 |
@@ -33,15 +33,13 @@ git clone https://github.com/CATS-Lab/PI-Koopman.git
 cd PI-Koopman
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements-tested.txt
+python -m pip install -r requirements.txt
 python scripts/build_native.py
 ```
 
-[requirements-tested.txt](requirements-tested.txt) pins these versions; [requirements.txt](requirements.txt) lists dependency ranges.
-
 ## Quick Start
 
-With CATS-CF files in `data/release/`:
+CATS-CF data are included in the repository:
 
 ```sh
 python scripts/verify_data.py
@@ -90,8 +88,8 @@ python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 -
 | Physical/PI timing | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
 | Neural timing | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
 
-See [experiment-to-code mapping](PAPER_MAP.md) and [experiment configuration](configs/config.json). `run_main.py` and `summarize_prediction.py` accept `--config PATH` to use another grid.
+Grid settings: [configs/config.json](configs/config.json). `run_main.py` and `summarize_prediction.py` accept `--config PATH` to use another grid.
 
 ## License
 
-Code: [MIT](LICENSE). CATS-CF data: [CC BY 4.0](LICENSE-DATA). OpenACC retains its original license; see [third-party notices](THIRD_PARTY.md).
+Code: [MIT](LICENSE). CATS-CF data: [CC BY 4.0](LICENSE-DATA). OpenACC attribution and copyright notices are in the [data notes](data/external/openacc/README.md).

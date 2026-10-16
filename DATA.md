@@ -2,7 +2,7 @@
 
 `data/release/15s` and `30s` contain 42 trials each, 14 conditions × three runs.
 ACC1/ACC2 identify ACC following settings; HV1/HV2 identify the two recorded human
-drivers, not a broad driver population. Keep entire encounters together in splits.
+drivers. Keep entire encounters together in splits.
 The 15-s and 30-s windows can begin at different points in the same original run.
 
 Each directory has `koopman_ready/koopman_{125,25,5,1}hz.csv` and
@@ -22,7 +22,7 @@ projection. Gap subtracts 3 m from longitudinal sensor spacing. CORRIMU incremen
 are divided by their source intervals; units are documented in the field dictionary.
 25/5/1-Hz files are exact integer decimations, without anti-alias filtering.
 10 Hz is interpolated within each observation interval only. Relative speed is
-recomputed after resampling. No hidden dense follower samples enter neural fitting.
+recomputed after resampling.
 
 A nominal D-second release has D×rate rows, not D×rate+1: 15 s at 25 Hz contains
 375 rows ending at 14.96 s. Prediction histories strictly inside 30-s records are
@@ -31,8 +31,7 @@ origin is 20 s, with the next 5 s scored excluding the common initial state.
 
 Public tables retain trial-local ENU coordinates, headings, relative sample times,
 and the motion channels above. Absolute GPS time, latitude/longitude, geographic
-ENU origins, and timestamp-bearing source identifiers are removed. Existing numeric
-values in retained columns are unchanged. Human drivers are labeled HV1/HV2.
+ENU origins, and timestamp-bearing source identifiers are removed. Human drivers are labeled HV1/HV2.
 
 The geometry and window-selection implementation is in `data/scripts/`.
 For data owners with private synchronized parent tables, run:

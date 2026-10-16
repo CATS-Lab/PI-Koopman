@@ -15,9 +15,9 @@
 
 ## 安装
 
-已测试环境：**macOS arm64（Python 3.12.14）**和 **Linux x86_64（Python 3.12.15）**，均使用 CPU。需要 C99 编译器（通过 `cc` 调用，或设置 `CC`）。CUDA 运行尚未测试。
+运行环境：**macOS arm64（Python 3.12.14）**和 **Linux x86_64（Python 3.12.15）**，均使用 CPU。需要 C99 编译器（通过 `cc` 调用，或设置 `CC`）。
 
-| 依赖 | 已测试版本 |
+| 依赖 | 版本 |
 |---|---|
 | NumPy | 2.5.3 |
 | SciPy | 1.18.1 |
@@ -33,15 +33,13 @@ git clone https://github.com/CATS-Lab/PI-Koopman.git
 cd PI-Koopman
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements-tested.txt
+python -m pip install -r requirements.txt
 python scripts/build_native.py
 ```
 
-[requirements-tested.txt](requirements-tested.txt) 固定上述版本；[requirements.txt](requirements.txt) 列出依赖版本范围。
-
 ## 快速开始
 
-将 CATS-CF 数据放在 `data/release/` 后执行：
+仓库已包含 CATS-CF 数据，直接执行：
 
 ```sh
 python scripts/verify_data.py
@@ -90,8 +88,8 @@ python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 -
 | 物理／PI 模型计时 | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
 | 神经模型计时 | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
 
-详见[实验与代码对应关系](PAPER_MAP.md)、[实验配置](configs/config.json)。运行与汇总脚本均支持通过 `--config PATH` 指定另一套网格配置。
+实验网格见 [configs/config.json](configs/config.json)。运行与汇总脚本均支持通过 `--config PATH` 指定另一套网格配置。
 
 ## 许可
 
-代码采用 [MIT](LICENSE)，CATS-CF 数据采用 [CC BY 4.0](LICENSE-DATA)。OpenACC 保留原始许可，详见[第三方说明](THIRD_PARTY.md)。
+代码采用 [MIT](LICENSE)，CATS-CF 数据采用 [CC BY 4.0](LICENSE-DATA)。OpenACC 的来源与版权声明见[数据说明](data/external/openacc/README.md)。
