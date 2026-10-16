@@ -24,14 +24,14 @@ are divided by their source intervals; units are documented in the field diction
 10 Hz is interpolated within each observation interval only. Relative speed is
 recomputed after resampling.
 
-A nominal D-second release has D×rate rows, not D×rate+1: 15 s at 25 Hz contains
+A D-second release contains D×rate samples: 15 s at 25 Hz contains
 375 rows ending at 14.96 s. Prediction histories strictly inside 30-s records are
 endpoint-inclusive, e.g. 3 s at 10 Hz gives 31 samples. The principal prediction
 origin is 20 s, with the next 5 s scored excluding the common initial state.
 
 Public tables retain trial-local ENU coordinates, headings, relative sample times,
 and the motion channels above. Absolute GPS time, latitude/longitude, geographic
-ENU origins, and timestamp-bearing source identifiers are removed. Human drivers are labeled HV1/HV2.
+ENU origins, and timestamp-bearing source identifiers are removed.
 
 The geometry and window-selection implementation is in `data/scripts/`.
 For data owners with private synchronized parent tables, run:
@@ -41,6 +41,4 @@ python scripts/rebuild_data.py --input /path/to/private/parents --output outputs
 ```
 
 This runs the original geometry pipeline, then applies the public-field export.
-The private parent tables are not required for training or evaluation using the
-included release. Public fields are defined in `metadata/data_dictionary.csv`
-under `data/release/`.
+Training and evaluation use the included release tables.

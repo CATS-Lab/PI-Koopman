@@ -8,7 +8,7 @@ Models: CTH, IDM, PI-Koopman-CTH, PI-Koopman-IDM, DNN, LSTM, and projected Deep 
 
 ## Data
 
-- **CATS-CF**: 42 leader–follower trials across 14 conditions, with three repetitions per condition. Includes ACC and human driving, with 15-s and 30-s windows. Public tables retain local coordinates and relative time, with absolute time and geographic location removed. Data live in `data/release/`; see [data structure and fields](DATA.md).
+- **CATS-CF**: 42 leader–follower trials across 14 conditions, with three repetitions per condition. Includes ACC and human driving, with 15-s and 30-s windows. Tables provide local coordinates and relative time. Data live in `data/release/`; see [data structure and fields](DATA.md).
 - **OpenACC**: [official JRC download](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/). We use 284 30-s episodes from AstaZero and Casale. See [source and license details](data/external/openacc/README.md).
 
 CLI names: `local` = CATS-CF; `openacc` = OpenACC.

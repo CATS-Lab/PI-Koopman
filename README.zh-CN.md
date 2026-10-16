@@ -8,7 +8,7 @@
 
 ## 数据
 
-- **CATS-CF**：42 个双车跟驰试验，覆盖 14 种条件，每种重复 3 次，包含 ACC 和人工驾驶，提供 15 秒及 30 秒窗口。公开数据保留局部坐标与相对时间，移除了绝对时间和地理位置。数据位于 `data/release/`，详见[数据结构与字段](DATA.md)。
+- **CATS-CF**：42 个双车跟驰试验，覆盖 14 种条件，每种重复 3 次，包含 ACC 和人工驾驶，提供 15 秒及 30 秒窗口。数据提供局部坐标与相对时间。数据位于 `data/release/`，详见[数据结构与字段](DATA.md)。
 - **OpenACC**：[JRC 官方下载](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/)。本文使用 AstaZero 和 Casale 的 284 个 30 秒片段，详见[来源与许可说明](data/external/openacc/README.md)。
 
 命令参数中，`local` 表示 CATS-CF，`openacc` 表示 OpenACC。
