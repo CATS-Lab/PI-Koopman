@@ -7,6 +7,6 @@ out=root/'build';out.mkdir(exist_ok=True)
 name='revision_native.dylib' if sys.platform=='darwin' else 'revision_native.so'
 cmd=shlex.split(os.environ.get('CC','cc'))+['-O3','-std=c99','-fPIC',
     '-dynamiclib' if sys.platform=='darwin' else '-shared',
-    str(root/'experiments/revision_native.c'),'-o',str(out/name),'-lm']
+    str(root/'src/revision_native.c'),'-o',str(out/name),'-lm']
 subprocess.run(cmd,check=True)
 print(out/name)

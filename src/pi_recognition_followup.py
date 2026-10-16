@@ -11,9 +11,6 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'data/release/15s/koopman_ready/koopman_25hz.csv'
 OUT = ROOT / 'results/pi_recognition_2026-10-15'
-COEFFICIENT_NAMES = ('c0', 'cs', 'cv', 'cd')
-KINEMATIC_NAMES = tuple(f'{x}_{q}' for x in ('gap', 'v', 'd') for q in ('mean', 'sd'))
-LEADER_NAMES = ('u_mean', 'u_sd', 'u_range', 'leader_acc_sd')
 PI_CONFIGS = {
     'PI-Koopman-CTH': dict(dictionary='quadratic', prior='cth', T=1., kappa=1., ridge=.1),
     'PI-Koopman-IDM': dict(dictionary='cth', prior='idm', T=1., kappa=1., ridge=.1),
@@ -83,41 +80,6 @@ def _validate(t, z, u=None):
     return t, z
 
 
-def fit_affine4(t, z, u=None):
-    """Exact exploratory_findings.affine arithmetic, without importing its runner.
-
-    Fixed 26-sample ordinary integral windows, stride12, ridge0.1 and local
-    scale floors [1,.5,.5]. Returns a physical-coordinate full field and audit.
-    """
-    t, z = _validate(t, z, u)
-    if len(t) < 26 or not np.allclose(np.diff(t), .04, atol=1e-8):
-        raise ValueError('Frozen affine4 requires at least 26 samples at 25 Hz')
-    start = time.perf_counter()
-    mu = z.mean(0); sc = np.maximum(z.std(0), [1., .5, .5])
-    X = np.c_[np.ones(len(z)), (z-mu)/sc]
-    A, y = [], []
-    for j in range(0, len(t)-26+1, 12):
-        sl = slice(j, j+26); T = t[j+25]-t[j]
-        A.append(np.trapezoid(X[sl], t[sl], axis=0)/T)
-        y.append((z[j+25, 1]-z[j, 1])/T)
-    A = np.array(A); y = np.array(y)
-    sv = np.linalg.svd(A/np.sqrt(len(A)), compute_uv=False)
-    c = np.linalg.solve(A.T@A/len(A)+.1*np.eye(4), A.T@y/len(A))
-    beta = np.r_[c[0]-np.sum(c[1:]*mu/sc), c[1:]/sc]
-    rss = np.sum((A@c-y)**2); tss = np.sum((y-y.mean())**2)
-    audit = dict(zip(COEFFICIENT_NAMES, beta))
-    audit.update(condition=sv[0]/sv[-1], effective_rank=int(np.sum(sv>sv[0]*1e-3)),
-                 integral_r2=1-rss/tss if tss>1e-12 else np.nan,
-                 rows=len(y), singular_values=sv, local_mean=mu, local_scale=sc,
-                 standardized_coef=c, fit_seconds=time.perf_counter()-start)
-    model = dict(kind='field', dictionary='affine', prior=None, coef=beta,
-                 feature_mean=np.zeros(4), feature_scale=np.ones(4),
-                 zmean=mu, zscale=sc, method='ordinary_integral_frozen_exploratory',
-                 config=dict(support_samples=26, stride_samples=12, ridge=.1),
-                 training_min=z.min(0), training_max=z.max(0))
-    return model, audit
-
-
 def fit_pi_models(t, z, u):
     """Fit both current main PI variants, reusing native physical calibrations.
 
@@ -152,45 +114,3 @@ def fit_pi_models(t, z, u):
     return results
 
 
-def fixed_features(t, z, u):
-    """Original kinematic6 and leader4 in their original ordered coordinates."""
-    t, z = _validate(t, z, u); u = np.asarray(u, float)
-    kinematic = np.array([stat for j in range(3) for stat in (z[:, j].mean(), z[:, j].std(ddof=1))])
-    leader = np.array([u.mean(), u.std(ddof=1), np.ptp(u), np.gradient(u, t).std(ddof=1)])
-    return dict(kinematic6=kinematic, leader4=leader,
-                kinematic_names=KINEMATIC_NAMES, leader_names=LEADER_NAMES)
-
-
-def project_response4(model, probes, weights=None):
-    """Project the full response onto common physical [1,s,v,d] coordinates.
-
-    The caller supplies the same external probes/weights for every method.
-    No probe generation or target/label-dependent selection occurs here.
-    Centering/scaling stabilizes least squares and is inverted exactly.
-    """
-    try:
-        from .revision_koopman import acceleration
-    except ImportError:
-        from revision_koopman import acceleration
-    probes = np.asarray(probes, float)
-    if probes.ndim != 2 or probes.shape[1] != 3 or len(probes) < 4 or not np.isfinite(probes).all():
-        raise ValueError('Expected at least four finite physical-coordinate probes')
-    w = np.ones(len(probes)) if weights is None else np.asarray(weights, float)
-    if w.shape != (len(probes),) or not np.isfinite(w).all() or np.any(w < 0) or w.sum() <= 0:
-        raise ValueError('Weights must be finite, nonnegative, and have positive sum')
-    w = w/w.sum()
-    mu = np.sum(w[:, None]*probes, axis=0)
-    sc = np.sqrt(np.sum(w[:, None]*(probes-mu)**2, axis=0))
-    sc = np.where(sc > 0, sc, 1.)
-    X = np.c_[np.ones(len(probes)), (probes-mu)/sc]
-    response = acceleration(model, probes)
-    if not np.isfinite(response).all():
-        raise ValueError('Model response is nonfinite on supplied probes')
-    c, _, rank, singular = np.linalg.lstsq(X*np.sqrt(w[:, None]), response*np.sqrt(w), rcond=None)
-    if rank != 4:
-        raise ValueError('Supplied common probes do not identify four affine coordinates')
-    beta = np.r_[c[0]-np.sum(c[1:]*mu/sc), c[1:]/sc]
-    audit = dict(rank=int(rank), singular_values=singular, n_probes=len(probes),
-                 projection_rmse=float(np.sqrt(np.sum(w*(X@c-response)**2))),
-                 probe_mean=mu, probe_scale=sc)
-    return dict(zip(COEFFICIENT_NAMES, beta)), audit

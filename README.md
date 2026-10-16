@@ -26,9 +26,11 @@ Tested with Python **3.12.14** on **macOS arm64 / CPU**. A C99 compiler (`cc`, o
 | PyTorch | 2.14.0 |
 | threadpoolctl | 3.7.0 |
 
-Run from the repository root:
+Clone the repository, then run:
 
 ```sh
+git clone https://github.com/CATS-Lab/PI-Koopman.git
+cd PI-Koopman
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-tested.txt
@@ -52,8 +54,8 @@ This fits CTH, IDM, and both PI models using 3 s of history at 10 Hz, then forec
 To prepare OpenACC:
 
 ```sh
-python experiments/download_openacc.py
-python experiments/revision_data.py
+python scripts/download_openacc.py
+python src/revision_data.py
 ```
 
 ## Reproduce the paper
@@ -85,11 +87,10 @@ python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 -
 | Known-law response-field reconstruction | `python experiments/synthetic_benchmark.py` |
 | Paired sampling-rate/noise consistency | `python experiments/claim_rate_consistency.py` |
 | ACC/manual recognition from PI residuals | `python experiments/run_pi_residual_recognition.py` |
-| Check synthetic and recognition results against references | `python scripts/verify_reference.py` |
 | Physical/PI timing | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
 | Neural timing | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
 
-See [experiment-to-code mapping](PAPER_MAP.md) and [experiment configuration](configs/main_text.json). The full expanded neural grid has not yet been validated.
+See [experiment-to-code mapping](PAPER_MAP.md) and [experiment configuration](configs/config.json). The full expanded neural grid has not yet been validated.
 
 ## License
 

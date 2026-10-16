@@ -1,8 +1,11 @@
 """Fixed synthetic tests; no experimental dataset is used for design or tuning.
 
 Compare the same quadratic dictionary across differentiation/integration choices.
-Separately reproduce operator FD/log/resolvent on a known affine invariant lift.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from pathlib import Path
 import sys,json,hashlib,time
 import numpy as np

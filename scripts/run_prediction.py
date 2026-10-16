@@ -1,6 +1,6 @@
 """Main-text physical/PI cells with the original source-group selection."""
 import argparse, json, pathlib, sys
-root=pathlib.Path(__file__).resolve().parents[1];sys.path.insert(0,str(root/'experiments'))
+root=pathlib.Path(__file__).resolve().parents[1];sys.path.insert(0,str(root/'experiments'));sys.path.insert(0,str(root/'src'))
 from empirical_benchmark import load_trials
 from revision_data import openacc
 import protocol_revision_sensitivity as p
@@ -14,5 +14,5 @@ protocol=dict(models=p.METHODS,selection='exclude target run or whole OpenACC so
  failure_penalties=dict(speed=1000,gap=10000),scope='main-text physical and PI candidates only')
 (p.OUT/'protocol_frozen.json').write_text(json.dumps(protocol,indent=2))
 trials=load_trials(30,125)[0] if a.dataset=='local' else openacc()[0]
-if not trials:raise SystemExit('Missing OpenACC: run experiments/download_openacc.py then experiments/revision_data.py.')
+if not trials:raise SystemExit('Missing OpenACC: run scripts/download_openacc.py then src/revision_data.py.')
 p.run_cell(a.dataset,a.budget,a.rate,a.origin,trials)

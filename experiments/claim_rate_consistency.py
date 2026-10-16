@@ -4,6 +4,10 @@ Run with the project Python packages on PYTHONPATH. The local 125 Hz parent is
 corrupted once before thinning. A numerical agreement reference is not truth.
 This experiment concerns acquisition sampling, not physical frequency response.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from pathlib import Path
 import argparse
 import hashlib
@@ -65,7 +69,6 @@ def freeze():
             raise RuntimeError('Frozen protocol differs; do not silently overwrite or retune.')
     else:
         path.write_text(json.dumps(protocol, indent=2))
-        (OUT/'source_at_execution.py').write_bytes(Path(__file__).read_bytes())
 
 
 def law(z, p):

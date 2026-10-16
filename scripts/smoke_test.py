@@ -1,7 +1,7 @@
 """Numerical checks, independent Python/native agreement, and neural updates."""
 import json,pathlib,sys,importlib
 import numpy as np
-root=pathlib.Path(__file__).resolve().parents[1];sys.path.insert(0,str(root/'experiments'))
+root=pathlib.Path(__file__).resolve().parents[1];sys.path.insert(0,str(root/'experiments'));sys.path.insert(0,str(root/'src'))
 import revision_koopman as k,revision_physics as ph
 from empirical_benchmark import load_trials
 from protocol_revision_sensitivity import resample

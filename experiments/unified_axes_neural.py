@@ -4,6 +4,10 @@ Each declared cell independently repeats compact solver/checkpoint candidates,
 expanded staged search and target-group-excluded selection. CUDA graph replay
 changes execution, not the optimizer updates, starts, loss, or admissibility.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from pathlib import Path
 import argparse,copy,hashlib,inspect,json,math,time
 import numpy as np
@@ -46,12 +50,11 @@ def frozen_protocol():
         numerics='Compact both held acquisition-clock field and continuous<=0.04s substeps; source chooses. Expanded/LSTM exact acquisition updates and union-grid kinematics. No hidden native calibration labels.',
         failures='Retain every candidate and all seeds, fixed1000m/s and10000m errors; no failed row dropped.',
         cuda_graph='Optional exact repeated optimizer-step graph, same deterministic starts, Adam,cosineLR and per-modelclip. Float32,TF32off. CPU/GPU numericalcheck archived.',
-        inputs={str(p.relative_to(ROOT)):digest(p) for p in [Path(__file__),ROOT/'experiments/strengthen_encounter_staged.py',ROOT/'experiments/strengthen_encounter_neural.py',ROOT/'experiments/protocol_revision_neural10.py',ROOT/'experiments/budget_neural30.py',ROOT/'experiments/budget_lstm30.py']})
+        inputs={str(p.relative_to(ROOT)):digest(p) for p in [Path(__file__),ROOT/'src/strengthen_encounter_staged.py',ROOT/'src/strengthen_encounter_neural.py',ROOT/'src/protocol_revision_neural10.py',ROOT/'src/budget_neural30.py',ROOT/'src/budget_lstm30.py']})
     path=OUT/'protocol_frozen.json'
     if path.exists():
         old=json.loads(path.read_text());assert {k:v for k,v in old.items() if k!='inputs'}=={k:v for k,v in p.items() if k!='inputs'}
     else:path.write_text(json.dumps(p,indent=2))
-    (OUT/'source_at_execution.py').write_bytes(Path(__file__).read_bytes())
 
 
 def clock_union(t,rate):

@@ -11,9 +11,9 @@
 | PI residual recognition | run_pi_residual_recognition.py | full nominal 15 s/25 Hz; 30 one-second residual supports; run-disjoint thresholds |
 | Data preparation | scripts/rebuild_data.py --input <private-parents>; data/scripts | frozen synchronized parents; geometry and best fixed windows |
 
-Paths without a prefix are in `experiments/`. The old affine-coefficient classifier
-is not the main demonstration; affine/physical residual controls remain with the
-current PI demonstration because it uses them directly. Strong-error predictive
+Experiment entry points are in `experiments/`; shared model and training modules
+are in `src/`. Prediction grid settings are read from `configs/config.json`. Physical baselines are retained in the recognition demonstration, matching the
+main-text table. Strong-error predictive
 stress and the RTM/hybrid comparison are explicitly supplementary in the selected
 latest main text and are excluded as standalone experiments.
 

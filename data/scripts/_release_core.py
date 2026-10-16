@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import math
 import re
@@ -596,20 +595,6 @@ def make_data_dictionary(public_columns: list[str], koopman_columns: list[str]) 
     return pd.DataFrame(rows).sort_values(["file_group", "column"]).reset_index(drop=True)
 
 
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def write_checksums(output_root: Path) -> None:
-    paths = sorted(p for p in output_root.rglob("*") if p.is_file() and p.name != "SHA256SUMS.txt")
-    lines = [f"{sha256_file(path)}  {path.relative_to(output_root).as_posix()}" for path in paths]
-    (output_root / "SHA256SUMS.txt").write_text("\n".join(lines) + "\n", encoding="ascii")
 
 
 def assert_release(public: pd.DataFrame, rates: dict[int, pd.DataFrame], quality: pd.DataFrame, splits: pd.DataFrame) -> dict:

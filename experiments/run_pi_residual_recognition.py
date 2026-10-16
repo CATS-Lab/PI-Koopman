@@ -1,4 +1,8 @@
 """Frozen in-sample residual recognition demonstration. Run explicitly only."""
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from pathlib import Path
 import csv
 import hashlib
@@ -130,8 +134,8 @@ def main():
     synthetic_checks()
     OUT.mkdir(parents=True, exist_ok=True)
     sources = [Path(__file__), Path(helpers.__file__), Path(stats.__file__),
-               Path(__file__).with_name('revision_koopman.py'),
-               Path(__file__).with_name('revision_physics.py'), helpers.DATA]
+               Path(helpers.__file__).with_name('revision_koopman.py'),
+               Path(helpers.__file__).with_name('revision_physics.py'), helpers.DATA]
     hashes = {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}
     save_json(OUT/'protocol.json', dict(source_sha256=hashes, window_seconds=1.,
               stride_samples=12, sampling_hz=25, encounter_seconds=15,
@@ -150,8 +154,6 @@ def main():
             t, z, u = trial['t'], trial['z'], trial['u']
             print(f'[{index+1}/{len(trials)}] fitting {current_uid}', flush=True)
             fitted = helpers.fit_pi_models(t, z, u)
-            affine, audit = helpers.fit_affine4(t, z, u)
-            fitted['Affine4'] = dict(model=affine, audit=audit)
             models[current_uid] = dict(metadata=metadata, fitted=fitted)
             for name, item in fitted.items():
                 residual_rows = ordinary_residuals(t, z, item['model'])
@@ -197,9 +199,6 @@ def main():
                        claim='In-sample observed-state residual variability recognition demonstration; not independent system-identification validation')
         save_csv(OUT/'oof.csv', oof)
         save_json(OUT/'summary.json', summary)
-        save_json(OUT/'historical_reference.json', dict(
-            description='Historical affine coefficient plus logistic reference; not a matched residual-score comparison',
-            balanced_accuracy_percent=79.17))
     except Exception as exc:
         save_json(OUT/'failure.json', dict(trial_uid=current_uid, error=str(exc), traceback=traceback.format_exc(),
                                          policy='Stopped; no failed encounter dropped', source_sha256=hashes))

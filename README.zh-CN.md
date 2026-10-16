@@ -26,9 +26,11 @@
 | PyTorch | 2.14.0 |
 | threadpoolctl | 3.7.0 |
 
-在仓库根目录执行：
+克隆仓库后执行：
 
 ```sh
+git clone https://github.com/CATS-Lab/PI-Koopman.git
+cd PI-Koopman
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-tested.txt
@@ -52,8 +54,8 @@ python scripts/run_prediction.py --dataset local --budget 3 --rate 10 --origin 2
 准备 OpenACC 数据：
 
 ```sh
-python experiments/download_openacc.py
-python experiments/revision_data.py
+python scripts/download_openacc.py
+python src/revision_data.py
 ```
 
 ## 复现论文实验
@@ -85,11 +87,10 @@ python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 -
 | 已知律响应场重建 | `python experiments/synthetic_benchmark.py` |
 | 配对采样率／噪声一致性 | `python experiments/claim_rate_consistency.py` |
 | PI 残差的 ACC／人工跟驰识别 | `python experiments/run_pi_residual_recognition.py` |
-| 对照合成与识别实验的参考结果 | `python scripts/verify_reference.py` |
 | 物理／PI 模型计时 | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
 | 神经模型计时 | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
 
-详见[实验与代码对应关系](PAPER_MAP.md)、[实验配置](configs/main_text.json)。完整 expanded 神经搜索网格尚未完成验证。
+详见[实验与代码对应关系](PAPER_MAP.md)、[实验配置](configs/config.json)。完整 expanded 神经搜索网格尚未完成验证。
 
 ## 许可
 

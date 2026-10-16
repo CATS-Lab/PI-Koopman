@@ -36,6 +36,5 @@
     "score": "speed_rmse + gap_rmse / 10",
     "source_population": "all recorded modes",
     "report_population": "ACC only"
-  },
-  "implementation": "CLI defaults and frozen experiment source define the executable parameters; this JSON documents those defaults"
+  }
 }

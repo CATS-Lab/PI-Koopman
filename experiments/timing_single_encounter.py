@@ -3,6 +3,10 @@
 Run inside the portable bundle made by prepare_timing_single_encounter.py.
 No model batching, hyperparameter search, or test-outcome selection is performed.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 import os
 for _var in ['OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS',
              'VECLIB_MAXIMUM_THREADS','NUMEXPR_NUM_THREADS','BLIS_NUM_THREADS']:
@@ -50,7 +54,7 @@ def main():
               requested_numerical_threads=1,threadpool_info=pools,
               cpu_count=os.cpu_count(),input_sha256=hashlib.sha256((root/'data/timing/state_arrays.npz').read_bytes()).hexdigest(),
               script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-              native_sha256=hashlib.sha256((root/'experiments/revision_native.c').read_bytes()).hexdigest(),
+              native_sha256=hashlib.sha256((root/'src/revision_native.c').read_bytes()).hexdigest(),
               cases_sha256=hashlib.sha256((root/'data/timing/cases.json').read_bytes()).hexdigest())
     (out/'runtime.json').write_text(json.dumps(host,indent=2)+'\n')
     rows=[];steps=[];replay=[];start=time.perf_counter()

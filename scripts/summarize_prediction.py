@@ -1,13 +1,15 @@
 """Aggregate complete seven-model main-text prediction axes without plots."""
-import argparse,json,pathlib
+import argparse,json,pathlib,sys
 import pandas as pd
 root=pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(root/'src'))
+from experiment_config import cells, DEFAULT_CONFIG
 p=argparse.ArgumentParser();p.add_argument('--axis',choices=['duration','rate'],required=True)
-p.add_argument('--dataset',choices=['local','openacc'],default='local');a=p.parse_args()
+p.add_argument('--dataset',choices=['local','openacc'],default='local');p.add_argument('--config',type=pathlib.Path,default=DEFAULT_CONFIG);a=p.parse_args()
 if a.axis=='rate' and a.dataset!='local':p.error('Rate axis is local only.')
-cells=[(b,10,20) for b in [3,8,15]] if a.axis=='duration' else [(8,r,o) for r in [1,5,10,25,125] for o in [15,20,24]]
+grid=cells(a.axis,a.dataset,a.config)
 frames=[]
-for b,r,o in cells:
+for _,b,r,o in grid:
  name=f'{a.dataset}_B{b}_Hz{r}_end{o}'
  paths=[root/'outputs/physics/grid'/name/'selected_metrics.csv',root/'results/unified_axes_2026-10-14/neural/grid'/name/'selected_encounter_metrics.csv']
  for path in paths:
