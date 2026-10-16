@@ -12,10 +12,8 @@
 | Data preparation | scripts/rebuild_data.py --input <private-parents>; data/scripts | frozen synchronized parents; geometry and best fixed windows |
 
 Experiment entry points are in `experiments/`; shared model and training modules
-are in `src/`. Prediction grid settings are read from `configs/config.json`. Physical baselines are retained in the recognition demonstration, matching the
-main-text table. Strong-error predictive
-stress and the RTM/hybrid comparison are explicitly supplementary in the selected
-latest main text and are excluded as standalone experiments.
+are in `src/`. Prediction execution and aggregation read `configs/config.json`.
+The recognition demonstration includes the physical baselines in the main-text table.
 
 Timing entry points: `experiments/timing_single_encounter.py` and
-`experiments/timing_neural_single.py`; frozen state/input excerpts are in `data/timing/`.
+`experiments/timing_neural_single.py`; state/input excerpts are in `data/timing/`.

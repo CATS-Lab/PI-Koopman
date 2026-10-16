@@ -15,7 +15,7 @@
 
 ## 安装
 
-已测试环境：Python **3.12.14**、**macOS arm64 / CPU**。需要 C99 编译器（通过 `cc` 调用，或设置 `CC`）。编译脚本也支持 Linux；Linux 和 CUDA 运行尚未测试。
+已测试环境：**macOS arm64（Python 3.12.14）**和 **Linux x86_64（Python 3.12.15）**，均使用 CPU。需要 C99 编译器（通过 `cc` 调用，或设置 `CC`）。CUDA 运行尚未测试。
 
 | 依赖 | 已测试版本 |
 |---|---|
@@ -90,7 +90,7 @@ python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 -
 | 物理／PI 模型计时 | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
 | 神经模型计时 | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
 
-详见[实验与代码对应关系](PAPER_MAP.md)、[实验配置](configs/config.json)。完整 expanded 神经搜索网格尚未完成验证。
+详见[实验与代码对应关系](PAPER_MAP.md)、[实验配置](configs/config.json)。运行与汇总脚本均支持通过 `--config PATH` 指定另一套网格配置。
 
 ## 许可
 

@@ -15,7 +15,7 @@ CLI names: `local` = CATS-CF; `openacc` = OpenACC.
 
 ## Installation
 
-Tested with Python **3.12.14** on **macOS arm64 / CPU**. A C99 compiler (`cc`, or set `CC`) is required. The build script also supports Linux; Linux and CUDA execution have not been tested.
+Tested on **macOS arm64 (Python 3.12.14)** and **Linux x86_64 (Python 3.12.15)**, using CPU. A C99 compiler (`cc`, or set `CC`) is required. CUDA execution has not been tested.
 
 | Dependency | Tested version |
 |---|---|
@@ -90,7 +90,7 @@ python experiments/unified_axes_neural.py --dataset local --budget 3 --rate 10 -
 | Physical/PI timing | `python experiments/timing_single_encounter.py --label my-cpu --output outputs/timing_cpu` |
 | Neural timing | `python experiments/timing_neural_single.py --device cpu --label my-cpu --output outputs/timing_neural` |
 
-See [experiment-to-code mapping](PAPER_MAP.md) and [experiment configuration](configs/config.json). The full expanded neural grid has not yet been validated.
+See [experiment-to-code mapping](PAPER_MAP.md) and [experiment configuration](configs/config.json). `run_main.py` and `summarize_prediction.py` accept `--config PATH` to use another grid.
 
 ## License
 
