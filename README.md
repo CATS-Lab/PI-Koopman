@@ -55,7 +55,7 @@ To prepare OpenACC:
 
 ```sh
 python scripts/download_openacc.py
-python src/revision_data.py
+python scripts/prepare_openacc.py
 ```
 
 ## Reproduce the paper

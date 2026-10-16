@@ -38,7 +38,7 @@ def freeze():
         protocol_version=1,
         script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         local='All 42 released 15 s, 125 Hz trials; 14 cases, 3 runs each.',
-        calibration_absolute_s=[2., 10.], future_absolute_s=[10., 15.],
+        calibration_relative_s=[2., 10.],
         rates_hz=RATES, methods=METHODS, estimator_config=CONFIG,
         physical_support='2 s, starts at 0,1,...,6 s; 50% overlap at every rate. FD uses adjacent intervals.',
         scenarios=SCENARIOS, noise_sd=dict(gap_m=.5, follower_speed_mps=.1, leader_speed_mps=.1),
@@ -49,8 +49,6 @@ def freeze():
         secondary_stability='RMS difference from same-method clean 125 Hz fit; this is stability, never acceleration ground truth.',
         response_noise='RMS change in regression response y relative to clean same-method/same-rate rows, m/s^2.',
         normalization='Common per-trajectory RMS clean 1 s velocity increments divided by 1 s, floor 0.1 m/s^2. Observed response scale, not acceleration truth.',
-        accuracy='Common dense clean future input and clean initial state; next approximately 5 s gap/speed RMSE excludes initial state; failed rollouts retained. Conditional model accuracy, not noisy-input deployment.',
-        failure_penalty=dict(gap_rmse_m=10000., speed_rmse_mps=1000.),
         synthetic='12 independent objects (seeds 39000..39011), each with 3 input/initial-state realizations (seeds 49000+100*object+run); known stable local quadratic law; exact same fit and acquisition protocol.',
         synthetic_law='a*(s-s0-tau*v)+b*d+c*(s-s0-tau*v)^2-h*d^2; a~U(.08,.18), b~U(.3,.8), tau~U(1,1.8), s0~U(2,5), c~U(.001,.003), h~U(.003,.01).',
         synthetic_leader='base~U(14,24) + 1.5*sin(.45*t+phase1) + .5*sin(1.2*t+phase2); RK4 dt=.008 s; v0=u0+U(-3,3), s0_initial=law_s0+tau*v0+U(-7,7).',
@@ -117,24 +115,12 @@ def rms(a):
     return float(np.sqrt(np.mean(np.asarray(a)**2)))
 
 
-def evaluate_rollout(m, truth):
-    if m is None:
-        return dict(rollout_failed=1, speed_rmse_mps=1000., gap_rmse_m=10000., negative_speed=0, negative_gap=0)
-    pred = physics.predict_field(m, truth.t, truth.u, truth.z[0, :2])
-    failed = not np.isfinite(pred).all()
-    return dict(rollout_failed=int(failed),
-                speed_rmse_mps=1000. if failed else rms(pred[1:, 1]-truth.z[1:, 1]),
-                gap_rmse_m=10000. if failed else rms(pred[1:, 0]-truth.z[1:, 0]),
-                negative_speed=int(np.any(pred[:, 1]<0)), negative_gap=int(np.any(pred[:, 0]<0)))
-
-
 def run_dataset(dataset, trials, parameters=None):
     rows = []
     started = time.time()
     for j, tr in enumerate(trials):
         clean = crop(tr, 2, 10)
         probes = crop(tr, 2, 10, 5).z
-        truth = crop(tr, 10, 15)
         scale = max(.1, rms(clean.z[125:, 1]-clean.z[:-125, 1]))
         clean_models = {}
         clean_y = {}
@@ -176,7 +162,6 @@ def run_dataset(dataset, trials, parameters=None):
                             record[key] = np.nan
                         if parameters is not None:
                             record['field_truth_rmse_mps2'] = np.nan
-                    record.update(evaluate_rollout(m, truth))
                     for key in list(record):
                         if key.startswith('field_') and key.endswith('_mps2') or key=='response_noise_rmse_mps2':
                             record[key.replace('_mps2', '_normalized')] = record[key]/scale
@@ -188,20 +173,13 @@ def run_dataset(dataset, trials, parameters=None):
 
 METRICS = ['field_rate_rmse_mps2', 'field_clean125_rmse_mps2', 'field_corruption_rmse_mps2',
            'response_noise_rmse_mps2', 'field_truth_rmse_mps2', 'field_rate_rmse_normalized',
-           'field_clean125_rmse_normalized', 'field_corruption_rmse_normalized', 'field_truth_rmse_normalized',
-           'speed_failure_inclusive_score', 'gap_failure_inclusive_score',
-           'successful_rollout_speed_rmse_mps', 'successful_rollout_gap_rmse_m',
-           'rollout_failed', 'fit_failed', 'negative_gap', 'negative_speed']
+           'field_clean125_rmse_normalized', 'field_corruption_rmse_normalized', 'field_truth_rmse_normalized', 'fit_failed']
 
 
 def summarize():
     d = pd.concat([pd.read_csv(OUT/f'{name}_metrics.csv') for name in ['local', 'synthetic']], ignore_index=True)
     # Preserve the original raw outcomes, while clearly distinguishing penalty
     # scores from physical RMSE in every derived summary and comparison.
-    d['speed_failure_inclusive_score'] = d.speed_rmse_mps
-    d['gap_failure_inclusive_score'] = d.gap_rmse_m
-    d['successful_rollout_speed_rmse_mps'] = d.speed_rmse_mps.where(d.rollout_failed==0)
-    d['successful_rollout_gap_rmse_m'] = d.gap_rmse_m.where(d.rollout_failed==0)
     metrics = [key for key in METRICS if key in d]
     groups = d.groupby(['dataset', 'scenario', 'rate_hz', 'method', 'group'])[metrics].mean().reset_index()
     groups.to_csv(OUT/'case_object_metrics.csv', index=False)
@@ -218,13 +196,13 @@ def summarize():
             else:
                 row[metric] = np.nan
         raw = d[(d.dataset==keys[0]) & (d.scenario==keys[1]) & (d.rate_hz==keys[2]) & (d.method==keys[3])]
-        row.update(n_fits=len(raw), rollout_failures=int(raw.rollout_failed.sum()), fit_failures=int(raw.fit_failed.sum()))
+        row.update(n_fits=len(raw), fit_failures=int(raw.fit_failed.sum()))
         rows.append(row)
     summary = pd.DataFrame(rows)
     summary.to_csv(OUT/'summary.csv', index=False)
     comparisons = []
     for keys, dd in groups.groupby(['dataset', 'scenario', 'rate_hz']):
-        for metric in ['field_rate_rmse_mps2', 'field_clean125_rmse_mps2', 'response_noise_rmse_mps2', 'field_truth_rmse_mps2', 'speed_failure_inclusive_score']:
+        for metric in ['field_rate_rmse_mps2', 'field_clean125_rmse_mps2', 'response_noise_rmse_mps2', 'field_truth_rmse_mps2']:
             for comparator in ['fd', 'integral']:
                 wide = dd.pivot(index='group', columns='method', values=metric)
                 for method in ['weak', 'expweak']:
@@ -257,7 +235,7 @@ def main():
     if not args.report_only:
         (OUT/'runtime.json').write_text(json.dumps(dict(seconds=time.time()-started, completed=True,
             script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()), indent=2))
-    print(summary[['dataset', 'scenario', 'rate_hz', 'method', 'field_rate_rmse_mps2', 'field_truth_rmse_mps2', 'rollout_failures']].to_string(index=False), flush=True)
+    print(summary[['dataset', 'scenario', 'rate_hz', 'method', 'field_rate_rmse_mps2', 'field_truth_rmse_mps2']].to_string(index=False), flush=True)
 
 
 if __name__=='__main__':

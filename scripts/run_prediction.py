@@ -14,5 +14,5 @@ protocol=dict(models=p.METHODS,selection='exclude target run or whole OpenACC so
  failure_penalties=dict(speed=1000,gap=10000),scope='main-text physical and PI candidates only')
 (p.OUT/'protocol_frozen.json').write_text(json.dumps(protocol,indent=2))
 trials=load_trials(30,125)[0] if a.dataset=='local' else openacc()[0]
-if not trials:raise SystemExit('Missing OpenACC: run scripts/download_openacc.py then src/revision_data.py.')
+if not trials:raise SystemExit('Missing OpenACC: run scripts/download_openacc.py then scripts/prepare_openacc.py.')
 p.run_cell(a.dataset,a.budget,a.rate,a.origin,trials)

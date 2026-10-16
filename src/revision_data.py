@@ -53,5 +53,3 @@ def corrupt(tr,scenario,seed):
     elif base_scenario!='white':raise ValueError(scenario)
     noise=errors*sigma;s=tr.z[:,0]+noise[:,0];v=tr.z[:,1]+noise[:,1];u=tr.u+noise[:,2]
     return Trial(tr.uid,tr.case,tr.mode,tr.run,tr.t.copy(),np.c_[s,v,u-v],u,tr.corr.copy(),tr.top2)
-if __name__=='__main__':
-    tt,mm=openacc(True);print(len(tt),mm.groupby(['campaign','mode']).size().to_dict())

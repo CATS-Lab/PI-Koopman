@@ -55,7 +55,7 @@ python scripts/run_prediction.py --dataset local --budget 3 --rate 10 --origin 2
 
 ```sh
 python scripts/download_openacc.py
-python src/revision_data.py
+python scripts/prepare_openacc.py
 ```
 
 ## 复现论文实验
