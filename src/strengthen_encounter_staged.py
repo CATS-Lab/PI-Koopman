@@ -143,6 +143,6 @@ def run(ds,b,rate,family):
     for trace in traces:
         g=trace['group'];before=scores(screen,g);bad=screen.copy();bad.loc[bad.group==g,'score']=np.arange(sum(bad.group==g))*1e7-1e10;after=scores(bad,g);assert before.equals(after)
         poisonchecks.append(dict(group=g,screen_target_poison_invariant=True,source_groups_disjoint=g not in trace['source_groups'],admissible_updates=trace['admissible_updates'],selected_updates=trace['locked_updates']))
-    (familyout/'selection_audit.json').write_text(json.dumps(poisonchecks,indent=2));(familyout/'complete.json').write_text(json.dumps(dict(dataset=ds,budget=b,family=family,n_groups=len(groups),n_trials=data['n'],training_seeds_screen=SCREEN,training_seeds_final=FINAL),indent=2));summarize()
+    (familyout/'selection_audit.json').write_text(json.dumps(poisonchecks,indent=2));(familyout/'complete.json').write_text(json.dumps(dict(dataset=ds,budget=b,family=family,n_groups=len(groups),n_trials=data['n'],training_seeds_screen=SCREEN,training_seeds_final=FINAL),indent=2))
 
 
