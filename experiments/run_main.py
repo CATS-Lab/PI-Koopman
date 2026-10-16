@@ -1,7 +1,7 @@
 """Launch exactly the main-text axes; full neural search can take many hours."""
 import argparse,pathlib,subprocess,sys
 root=pathlib.Path(__file__).resolve().parents[1]
-from pikoopman.config import cells, DEFAULT_CONFIG
+from src.config import cells, DEFAULT_CONFIG
 def main():
     p=argparse.ArgumentParser();p.add_argument('--axis',choices=['duration','rate'],required=True)
     p.add_argument('--models',choices=['physics','neural','all'],default='all')

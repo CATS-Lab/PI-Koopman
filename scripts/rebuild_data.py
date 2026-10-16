@@ -2,8 +2,8 @@
 import argparse, pathlib, sys
 import pandas as pd
 root=pathlib.Path(__file__).resolve().parents[1]
-from pikoopman.data.release import select_all_runs, write_variant
-from pikoopman.data.privacy import sanitize_release
+from src.data.release import select_all_runs, write_variant
+from src.data.privacy import sanitize_release
 def main():
     p=argparse.ArgumentParser();p.add_argument('--input',type=pathlib.Path,required=True,help='Directory containing private synchronized parent tables');p.add_argument('--output',type=pathlib.Path,default=root/'outputs/rebuilt_data');a=p.parse_args()
     if a.output.resolve()==(root/'data/release').resolve():

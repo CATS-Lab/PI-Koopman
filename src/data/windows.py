@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from pikoopman.data.geometry import BASE_HZ, FLOAT_FORMAT, GAP_OFFSET_M, RATES_HZ, decimate, make_data_dictionary, make_koopman_table, make_quality_long, make_quality_manifest, role_mode, role_values
+from src.data.geometry import BASE_HZ, FLOAT_FORMAT, GAP_OFFSET_M, RATES_HZ, decimate, make_data_dictionary, make_koopman_table, make_quality_long, make_quality_manifest, role_mode, role_values
 
 
 def add_case_columns(pair: pd.DataFrame) -> pd.DataFrame:

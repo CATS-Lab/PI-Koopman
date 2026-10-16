@@ -1,7 +1,7 @@
 """Build the main-text OpenACC episode view from downloaded JRC files."""
 import sys
 from pathlib import Path
-from pikoopman.data.openacc import openacc
+from src.data.openacc import openacc
 
 if __name__ == '__main__':
     trials, manifest = openacc(True)

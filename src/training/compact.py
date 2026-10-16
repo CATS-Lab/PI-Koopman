@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Compact DNN and projected Deep Koopman training on 30-s encounters."""
-from pikoopman.models.neural import *
+from src.models.neural import *
 OUT = ROOT/'outputs/neural/compact/neural'
 
 def run(dataset,budget,rate,scenario='clean',corruption_seed=0,checkpoints=DEFAULT_CHECKPOINTS,pilot=False,force=False,frozen_selection_path=None):

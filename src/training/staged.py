@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
-import pikoopman.training.encounter as core
+import src.training.encounter as core
 
 OUT=core.OUT/'staged';SCREEN=[73,211];FINAL=[73,211,347,509,863]
 

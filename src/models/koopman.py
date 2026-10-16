@@ -11,7 +11,7 @@ import pandas as pd
 from scipy.linalg import logm, expm
 from scipy.optimize import least_squares
 
-from pikoopman.paths import ROOT
+from src.paths import ROOT
 OUT=ROOT/'outputs/models/koopman'
 
 

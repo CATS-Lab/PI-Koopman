@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Compact LSTM training on 30-s encounters."""
-from pikoopman.models.lstm import *
+from src.models.lstm import *
 OUT = ROOT/'outputs/neural/compact/lstm'
 
 def run(dataset, budget, rate):

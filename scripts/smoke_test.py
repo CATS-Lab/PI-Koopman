@@ -2,10 +2,10 @@
 import json,pathlib,sys,importlib
 import numpy as np
 root=pathlib.Path(__file__).resolve().parents[1]
-import pikoopman.models.koopman as k; import pikoopman.models.physics as ph
-from pikoopman.data.trials import load_trials
-from pikoopman.training.prediction import resample
-from pikoopman.data.openacc import crop
+import src.models.koopman as k; import src.models.physics as ph
+from src.data.trials import load_trials
+from src.training.prediction import resample
+from src.data.openacc import crop
 def main():
     checks=k.unit_checks();assert max(x['acceleration_error'] for x in checks)<1e-12
     tr=load_trials(30,125)[0][0];train=resample(tr,17,20,10);future=crop(tr,20,25)
@@ -21,12 +21,12 @@ def main():
       assert np.isfinite(native).all()
       error=float(np.max(np.abs(native-reference)));assert error<1e-8,(name,error)
       errors[name]=error
-    import pikoopman.models.neural as revision_neural; import pikoopman.models.lstm as revision_lstm
+    import src.models.neural as revision_neural; import src.models.lstm as revision_lstm
     revision_lstm.OUT.mkdir(parents=True,exist_ok=True)
     revision_neural.tests();revision_lstm.tests()
     from experiments import recognition as recognition
     recognition.synthetic_checks()
-    for name in ['experiments.neural_prediction','pikoopman.training.staged']:
+    for name in ['experiments.neural_prediction','src.training.staged']:
      importlib.import_module(name)
     report=dict(weak_constant_acceleration_max_error=max(x['acceleration_error'] for x in checks),native_python_max_abs_errors=errors,neural_unit_checks=True,recognition_synthetic_checks=True)
     (root/'outputs/checks').mkdir(parents=True,exist_ok=True);(root/'outputs/checks/smoke.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))

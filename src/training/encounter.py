@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 import torch
 from torch import nn
-from pikoopman.data.trials import ROOT, load_trials
-from pikoopman.data.openacc import crop, openacc
+from src.data.trials import ROOT, load_trials
+from src.data.openacc import crop, openacc
 
 OUT=ROOT/'outputs/neural/encounter'
 SEEDS=[73,211,347,509,863]

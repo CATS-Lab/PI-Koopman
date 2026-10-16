@@ -8,11 +8,11 @@ import json
 import traceback
 import numpy as np
 
-import pikoopman.evaluation.recognition as helpers
-import pikoopman.evaluation.statistics as stats
-from pikoopman.models.koopman import acceleration
-import pikoopman.models.koopman as koopman
-import pikoopman.models.physics as physics
+import src.evaluation.recognition as helpers
+import src.evaluation.statistics as stats
+from src.models.koopman import acceleration
+import src.models.koopman as koopman
+import src.models.physics as physics
 
 OUT = helpers.OUT
 N_BOOT = 5000

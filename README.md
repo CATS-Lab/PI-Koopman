@@ -94,10 +94,10 @@ Grid settings: [configs/config.json](configs/config.json). `run_main.py` and `su
 
 All experiment results are written under `outputs/`.
 
-- `src/pikoopman/models/`: Physical, Koopman, and neural implementations
-- `src/pikoopman/training/`: Training and source-group model selection
-- `src/pikoopman/data/`: Data loading, geometry, window selection, and public export
-- `src/pikoopman/evaluation/`: Metrics and recognition helpers
+- `src/models/`: Physical, Koopman, and neural implementations
+- `src/training/`: Training and source-group model selection
+- `src/data/`: Data loading, geometry, window selection, and public export
+- `src/evaluation/`: Metrics and recognition helpers
 - `experiments/`: Paper experiment and aggregation entry points
 - `scripts/`: Native build, data preparation, and checks
 

@@ -2,7 +2,7 @@
 import argparse,json,pathlib,sys
 import pandas as pd
 root=pathlib.Path(__file__).resolve().parents[1]
-from pikoopman.config import cells, DEFAULT_CONFIG
+from src.config import cells, DEFAULT_CONFIG
 def main():
     p=argparse.ArgumentParser();p.add_argument('--axis',choices=['duration','rate'],required=True)
     p.add_argument('--dataset',choices=['local','openacc'],default='local');p.add_argument('--config',type=pathlib.Path,default=DEFAULT_CONFIG);a=p.parse_args()

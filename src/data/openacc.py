@@ -3,8 +3,8 @@ from pathlib import Path
 import json,hashlib
 import numpy as np
 import pandas as pd
-from pikoopman.data.trials import Trial
-from pikoopman.paths import ROOT
+from src.data.trials import Trial
+from src.paths import ROOT
 def openacc(build=False):
     out=ROOT/'data/external/openacc';records=[];trials=[]
     for path in sorted((out/'raw').glob('*/*.csv')):

@@ -17,8 +17,8 @@ import scipy
 import pandas as pd
 if not hasattr(np, 'trapezoid'):
     np.trapezoid = np.trapz
-import pikoopman.models.koopman as koop
-import pikoopman.models.physics as physics
+import src.models.koopman as koop
+import src.models.physics as physics
 
 
 def fit_one(case, arrays, name):
@@ -52,7 +52,7 @@ def main():
               requested_numerical_threads=1,threadpool_info=pools,
               cpu_count=os.cpu_count(),input_sha256=hashlib.sha256((root/'data/timing/state_arrays.npz').read_bytes()).hexdigest(),
               script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-              native_sha256=hashlib.sha256((root/'src/pikoopman/models/native.c').read_bytes()).hexdigest(),
+              native_sha256=hashlib.sha256((root/'src/models/native.c').read_bytes()).hexdigest(),
               cases_sha256=hashlib.sha256((root/'data/timing/cases.json').read_bytes()).hexdigest())
     (out/'runtime.json').write_text(json.dumps(host,indent=2)+'\n')
     rows=[];steps=[];replay=[];start=time.perf_counter()

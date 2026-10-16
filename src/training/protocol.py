@@ -8,13 +8,13 @@ import argparse, hashlib, json, time
 import numpy as np
 import pandas as pd
 import torch
-from pikoopman.data.trials import ROOT, Trial, load_trials
-from pikoopman.data.openacc import crop
-from pikoopman.training.prediction import resample
-import pikoopman.training.encounter as core
-import pikoopman.training.staged as staged
-import pikoopman.training.compact as compact
-import pikoopman.training.lstm as recurrent
+from src.data.trials import ROOT, Trial, load_trials
+from src.data.openacc import crop
+from src.training.prediction import resample
+import src.training.encounter as core
+import src.training.staged as staged
+import src.training.compact as compact
+import src.training.lstm as recurrent
 
 OUT=ROOT/'outputs/neural/protocol'
 RATE=10

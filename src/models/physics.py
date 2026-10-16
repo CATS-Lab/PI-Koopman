@@ -3,7 +3,7 @@ from pathlib import Path
 import ctypes, time
 import numpy as np
 from scipy.optimize import least_squares
-from pikoopman.paths import ROOT
+from src.paths import ROOT
 import sys
 _native = ROOT/'build'/('revision_native.dylib' if sys.platform == 'darwin' else 'revision_native.so')
 if not _native.exists():

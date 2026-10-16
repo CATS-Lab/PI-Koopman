@@ -13,7 +13,8 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["."]
+include = ["src", "src.*"]
 
 [tool.setuptools.package-data]
-"pikoopman.models" = ["native.c"]
+"src.models" = ["native.c"]

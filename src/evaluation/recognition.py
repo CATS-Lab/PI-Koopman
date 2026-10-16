@@ -4,7 +4,7 @@ import csv
 import time
 import numpy as np
 
-from pikoopman.paths import ROOT
+from src.paths import ROOT
 DATA = ROOT / 'data/release/15s/koopman_ready/koopman_25hz.csv'
 OUT = ROOT / 'outputs/recognition'
 PI_CONFIGS = {
@@ -83,8 +83,8 @@ def fit_pi_models(t, z, u):
     prediction scores, tuning, classifier, or output writes enter this API.
     """
     t, z = _validate(t, z, u)
-    import pikoopman.models.physics as physics
-    import pikoopman.models.koopman as koop
+    import src.models.physics as physics
+    import src.models.koopman as koop
     results, priors = {}, {}
     for family in ('CTH', 'IDM'):
         coef, audit = physics.fit(t, z, u, family, max_nfev=400)

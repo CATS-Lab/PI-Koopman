@@ -10,8 +10,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from pikoopman.data.geometry import BASE_HZ, FLOAT_FORMAT, RATES_HZ, decimate, make_data_dictionary, make_koopman_table, make_quality_long, make_quality_manifest
-from pikoopman.data.windows import add_case_columns, best_window, make_public_measurements, quality_percentiles_present, rank_and_select, refresh_source_lineage, source_materialization_summary, status_arrays, summarize_window, trial_manifest
+from src.data.geometry import BASE_HZ, FLOAT_FORMAT, RATES_HZ, decimate, make_data_dictionary, make_koopman_table, make_quality_long, make_quality_manifest
+from src.data.windows import add_case_columns, best_window, make_public_measurements, quality_percentiles_present, rank_and_select, refresh_source_lineage, source_materialization_summary, status_arrays, summarize_window, trial_manifest
 
 
 def select_all_runs(

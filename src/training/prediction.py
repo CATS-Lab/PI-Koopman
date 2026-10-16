@@ -8,11 +8,11 @@ from pathlib import Path
 import argparse, hashlib, json, time
 import numpy as np
 import pandas as pd
-from pikoopman.data.trials import ROOT, Trial, load_trials
-from pikoopman.data.openacc import openacc, crop, corrupt
-import pikoopman.models.physics as physics
-import pikoopman.models.koopman as koop
-from pikoopman.evaluation.metrics import metric, grid
+from src.data.trials import ROOT, Trial, load_trials
+from src.data.openacc import openacc, crop, corrupt
+import src.models.physics as physics
+import src.models.koopman as koop
+from src.evaluation.metrics import metric, grid
 
 OUT = ROOT / 'outputs/physics'
 ORIGINS = [15, 20, 24]

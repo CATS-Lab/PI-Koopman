@@ -1,9 +1,9 @@
 """Main-text physical/PI cells with the original source-group selection."""
 import argparse, json, pathlib, sys
 root=pathlib.Path(__file__).resolve().parents[1]
-from pikoopman.data.trials import load_trials
-from pikoopman.data.openacc import openacc
-import pikoopman.training.prediction as p
+from src.data.trials import load_trials
+from src.data.openacc import openacc
+import src.training.prediction as p
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--dataset',choices=['local','openacc'],default='local')
     ap.add_argument('--budget',type=int,choices=[3,8,15],default=3)

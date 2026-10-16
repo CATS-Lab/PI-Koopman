@@ -4,7 +4,7 @@ import csv
 from dataclasses import dataclass
 import numpy as np
 
-from pikoopman.paths import ROOT
+from src.paths import ROOT
 
 @dataclass
 class Trial:

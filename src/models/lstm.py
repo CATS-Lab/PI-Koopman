@@ -17,8 +17,8 @@ import pandas as pd
 import torch
 from torch import nn
 
-from pikoopman.data.trials import ROOT, Trial, load_trials
-from pikoopman.data.openacc import crop, openacc
+from src.data.trials import ROOT, Trial, load_trials
+from src.data.openacc import crop, openacc
 
 OUT = ROOT/'outputs/models/lstm'
 SEEDS = [73, 211]

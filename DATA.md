@@ -33,7 +33,7 @@ Public tables retain trial-local ENU coordinates, headings, relative sample time
 and the motion channels above. Absolute GPS time, latitude/longitude, geographic
 ENU origins, and timestamp-bearing source identifiers are removed.
 
-The geometry and window-selection implementation is in `src/pikoopman/data/`.
+The geometry and window-selection implementation is in `src/data/`.
 For data owners with private synchronized parent tables, run:
 
 ```sh

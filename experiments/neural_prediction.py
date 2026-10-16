@@ -11,15 +11,15 @@ import argparse,copy,hashlib,inspect,json,math,time
 import numpy as np
 import pandas as pd
 import torch
-from pikoopman.data.trials import ROOT, load_trials
-from pikoopman.data.openacc import crop, openacc
-from pikoopman.training.prediction import resample
-import pikoopman.training.protocol as adapter
-import pikoopman.training.encounter as core
-import pikoopman.training.staged as staged
-import pikoopman.training.compact as compact
-import pikoopman.training.lstm as recurrent
-import pikoopman.models.neural as continuous
+from src.data.trials import ROOT, load_trials
+from src.data.openacc import crop, openacc
+from src.training.prediction import resample
+import src.training.protocol as adapter
+import src.training.encounter as core
+import src.training.staged as staged
+import src.training.compact as compact
+import src.training.lstm as recurrent
+import src.models.neural as continuous
 
 OUT=ROOT/'outputs/neural'
 ORIGIN=20; RATE=10; DEVICE='cpu'; USE_GRAPH=False
@@ -48,7 +48,7 @@ def frozen_protocol():
         numerics='Compact both held acquisition-clock field and continuous<=0.04s substeps; source chooses. Expanded/LSTM exact acquisition updates and union-grid kinematics. No hidden native calibration labels.',
         failures='Retain every candidate and all seeds, fixed1000m/s and10000m errors; no failed row dropped.',
         cuda_graph='Optional exact repeated optimizer-step graph, same deterministic starts, Adam,cosineLR and per-modelclip. Float32,TF32off. CPU/GPU numericalcheck archived.',
-        inputs={str(p.relative_to(ROOT)):digest(p) for p in [Path(__file__),ROOT/'src/pikoopman/training/staged.py',ROOT/'src/pikoopman/training/encounter.py',ROOT/'src/pikoopman/training/protocol.py',ROOT/'src/pikoopman/training/compact.py',ROOT/'src/pikoopman/training/lstm.py']})
+        inputs={str(p.relative_to(ROOT)):digest(p) for p in [Path(__file__),ROOT/'src/training/staged.py',ROOT/'src/training/encounter.py',ROOT/'src/training/protocol.py',ROOT/'src/training/compact.py',ROOT/'src/training/lstm.py']})
     path=OUT/'protocol_frozen.json'
     if path.exists():
         old=json.loads(path.read_text());assert {k:v for k,v in old.items() if k!='inputs'}=={k:v for k,v in p.items() if k!='inputs'}

@@ -94,10 +94,10 @@ python -m experiments.neural_prediction --dataset local --budget 3 --rate 10 --o
 
 所有实验结果统一写入 `outputs/`。
 
-- `src/pikoopman/models/`: 物理、Koopman 和神经模型实现
-- `src/pikoopman/training/`: 训练与按来源分组的模型选择
-- `src/pikoopman/data/`: 数据加载、几何处理、窗口选择与公开导出
-- `src/pikoopman/evaluation/`: 评价指标与识别工具
+- `src/models/`: 物理、Koopman 和神经模型实现
+- `src/training/`: 训练与按来源分组的模型选择
+- `src/data/`: 数据加载、几何处理、窗口选择与公开导出
+- `src/evaluation/`: 评价指标与识别工具
 - `experiments/`: 论文实验与结果汇总入口
 - `scripts/`: 编译、数据准备与检查工具
 

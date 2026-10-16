@@ -10,8 +10,8 @@ import numpy as np
 import pandas as pd
 import torch
 from torch import nn
-from pikoopman.data.trials import ROOT, load_trials, write_csv
-from pikoopman.data.openacc import openacc, crop, corrupt
+from src.data.trials import ROOT, load_trials, write_csv
+from src.data.openacc import openacc, crop, corrupt
 OUT=ROOT/'outputs/models/neural'
 torch.set_num_threads(2)
 SEEDS=[73,211];FAMILIES=['DNN','DeepKoopman-projected'];DEFAULT_CHECKPOINTS=[150,400]

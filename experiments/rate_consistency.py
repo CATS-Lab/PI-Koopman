@@ -10,10 +10,10 @@ import time
 import numpy as np
 import pandas as pd
 
-from pikoopman.data.trials import Trial, load_trials
-from pikoopman.data.openacc import crop, corrupt
-import pikoopman.models.koopman as koop
-import pikoopman.models.physics as physics
+from src.data.trials import Trial, load_trials
+from src.data.openacc import crop, corrupt
+import src.models.koopman as koop
+import src.models.physics as physics
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'outputs/rate_consistency'

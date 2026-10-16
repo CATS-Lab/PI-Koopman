@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 
-from pikoopman.paths import ROOT
+from src.paths import ROOT
 
 DEFAULT_CONFIG = ROOT / 'configs/config.json'
 
