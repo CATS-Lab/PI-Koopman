@@ -1,0 +1,182 @@
+{
+  "source": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/",
+  "download_date": "2026-09-27",
+  "licence": "CC BY 4.0, official per-campaign copyright.txt retained",
+  "files": [
+    {
+      "campaign": "Casale",
+      "file": "Casale_notes.txt",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/Casale_notes.txt",
+      "bytes": 2167,
+      "sha256": "67841e3fb8317d00a6c5f71cb22789d24baf5fc89f5aac96be06583c5708a6a3"
+    },
+    {
+      "campaign": "Casale",
+      "file": "Veh_specifications.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/Veh_specifications.csv",
+      "bytes": 237,
+      "sha256": "9337acc900c837a3cd12b9672cdea24b01695ebe2d592b4f9cd4388a98fa06c4"
+    },
+    {
+      "campaign": "Casale",
+      "file": "copyright.txt",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/copyright.txt",
+      "bytes": 540,
+      "sha256": "f20723519a580fb35b3499870f0b1baea54f483195105416e547f0014f1610d2"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part3.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part3.csv",
+      "bytes": 675781,
+      "sha256": "9f52b0b1ec33413f6057083c6cb09042ed807207b7b8f223ec038071f72e8bc6"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part4.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part4.csv",
+      "bytes": 304950,
+      "sha256": "c2c73a2af5d63e1b389c218aa78d1c548855130eb4aeeef01a8691acb4cd0bed"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part5.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part5.csv",
+      "bytes": 280178,
+      "sha256": "7bb32b84eb6465520e1a3a8a9e0ddbcb51991b56cc4422ef81b11c753921d2c5"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part6.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part6.csv",
+      "bytes": 4009880,
+      "sha256": "cf8d89e97ecf1a062e1fc80167efbcd49f6c36ac50ad03229b80d924368ce219"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part7.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part7.csv",
+      "bytes": 4055840,
+      "sha256": "7e3c9c44caaf090a600a2ae1d0583df972db73e2ac196de3519b02ea6f2077e4"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part8.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part8.csv",
+      "bytes": 266595,
+      "sha256": "11deea2d3a01fe264cffa760439c93f9f7cc2a2ee7d64ed3c6c4e96a6faa74de"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part9.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part9.csv",
+      "bytes": 411616,
+      "sha256": "f4c8550f0c5a0b079752b19767a2f7d4596e363c4b7ccc5991f6631cc3576840"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part10.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part10.csv",
+      "bytes": 900973,
+      "sha256": "0026f4a2ddf12f142b71e3b1054bd645f620a82ae01bfcba3c2d2d2ba8ec21fe"
+    },
+    {
+      "campaign": "Casale",
+      "file": "part11.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/Casale/part11.csv",
+      "bytes": 873524,
+      "sha256": "db1640d233ca3744def1ff3bbfddd79c6b9d141bbfb76f001aa49b29e9d73d5c"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "AstaZero_notes.txt",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/AstaZero_notes.txt",
+      "bytes": 2637,
+      "sha256": "c895411d34af6b8549cdecfed8ce21e13a10b6246a99d44899b88868aacb67f8"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "AstaZero_veh_specifications.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/AstaZero_veh_specifications.csv",
+      "bytes": 358,
+      "sha256": "7b249a99605a6d2c94f75ae1143cd1cb86f14bcf168152e08689f4c4acf902a1"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "copyright.txt",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/copyright.txt",
+      "bytes": 540,
+      "sha256": "f20723519a580fb35b3499870f0b1baea54f483195105416e547f0014f1610d2"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon3.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon3.csv",
+      "bytes": 12232242,
+      "sha256": "2c46d20601590be7cfc521c53609e44fb13ba2a25b5cd9a90e864b4bd68577f5"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon4.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon4.csv",
+      "bytes": 8858390,
+      "sha256": "9b0627381cc9575dabd1132627eb71fea458436623974b40755ee393bceb9bfc"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon5.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon5.csv",
+      "bytes": 9013277,
+      "sha256": "7f7943a7c5abebbe9f50fbc4fe168493bca46062b1d748922bb0ed555dc06b5c"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon6.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon6.csv",
+      "bytes": 8505530,
+      "sha256": "1ca5fe886c539a4e3c173f617118760013e4f9a63a14bccb790b7a2697789089"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon7.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon7.csv",
+      "bytes": 6669670,
+      "sha256": "2696ef06a83af7cd8aaea266c0f065b56346666e7c92342f2c76d85a96e3c9fa"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon8.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon8.csv",
+      "bytes": 6819429,
+      "sha256": "cb33a698b9831f327f1a05b25712a870fb19327c269dcfbe5ffb78cf62ba32c2"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon9.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon9.csv",
+      "bytes": 6946441,
+      "sha256": "dd2aff81b9ff4abb0b101092bb6b143b7b85f115d73bc042ed414127710acfd7"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_040719_platoon10.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_040719_platoon10.csv",
+      "bytes": 9654228,
+      "sha256": "144925322b0482cb21cf5099f80318ce01108d11eac20cafc0ff5038127adabf"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_050719_platoon1.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_050719_platoon1.csv",
+      "bytes": 14368061,
+      "sha256": "c07ee1afd2fbbc54b56b332bef71b3bac232c958332b5483768ae5edde854306"
+    },
+    {
+      "campaign": "AstaZero",
+      "file": "ASta_050719_platoon2.csv",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/AstaZero/ASta_050719_platoon2.csv",
+      "bytes": 17417226,
+      "sha256": "098fa8e0bc15d795e8098530890ee872bcb400c80f6a658550d54b11211b95fb"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "duration": {
+    "datasets": [
+      "local",
+      "openacc"
+    ],
+    "budgets_s": [
+      3,
+      8,
+      15
+    ],
+    "rate_hz": 10,
+    "origin_s": 20,
+    "future_s": 5
+  },
+  "rate": {
+    "dataset": "local",
+    "budget_s": 8,
+    "rates_hz": [
+      1,
+      5,
+      10,
+      25,
+      125
+    ],
+    "origins_s": [
+      15,
+      20,
+      24
+    ],
+    "future_s": 5
+  },
+  "selection": {
+    "local": "exclude entire run index",
+    "openacc": "exclude entire source file",
+    "score": "speed_rmse + gap_rmse / 10",
+    "source_population": "all recorded modes",
+    "report_population": "ACC only"
+  },
+  "implementation": "CLI defaults and frozen experiment source define the executable parameters; this JSON documents those defaults"
+}

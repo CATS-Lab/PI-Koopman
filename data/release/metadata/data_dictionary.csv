@@ -1,0 +1,44 @@
+file_group,column,data_type,unit,source,description,transformation
+koopman,case_id,string,-,metadata,Follower/leader mode pairing,role relabeling only
+koopman,follower_azimuth_deg,float,degree,INSPVAX,Follower azimuth clockwise from north,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,follower_east_m,float,m,ENU,Follower east coordinate,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,follower_lateral_acc_corrimu_mps2,float,m/s^2,CORRIMU,Follower lateral acceleration,source increment divided by per-row source CORRIMU sample interval
+koopman,follower_lateral_velocity_left_mps,float,m/s,INSPVAX projected,Follower velocity left of own heading,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,follower_longitudinal_acc_corrimu_mps2,float,m/s^2,CORRIMU,Follower longitudinal acceleration,source increment divided by per-row source CORRIMU sample interval
+koopman,follower_longitudinal_velocity_mps,float,m/s,INSPVAX projected,Follower velocity along own heading,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,follower_mode,string,-,experiment metadata,Follower control mode,role relabeling only
+koopman,follower_north_m,float,m,ENU,Follower north coordinate,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,follower_up_m,float,m,ENU,Follower up coordinate,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,follower_vertical_acc_corrimu_mps2,float,m/s^2,CORRIMU,Follower vertical acceleration,source increment divided by per-row source CORRIMU sample interval
+koopman,follower_vertical_velocity_mps,float,m/s,INSPVAX,Follower up velocity,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,follower_yaw_rate_corrimu_radps,float,rad/s,CORRIMU,Follower yaw rate,source increment divided by per-row source CORRIMU sample interval
+koopman,gap_m,float,m,derived,Approximate bumper gap,sensor_spacing_longitudinal_m - gap_offset_m
+koopman,gap_offset_m,float,m,assumption,Shared sensor-to-bumper correction,constant 3.0 m
+koopman,lateral_offset_left_m,float,m,ENU and follower heading,Leader lateral offset; positive left,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_azimuth_deg,float,degree,INSPVAX,Leader azimuth clockwise from north,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_east_m,float,m,ENU,Leader east coordinate,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_lateral_acc_corrimu_mps2,float,m/s^2,CORRIMU,Leader lateral acceleration,source increment divided by per-row source CORRIMU sample interval
+koopman,leader_lateral_velocity_left_mps,float,m/s,INSPVAX projected,Leader velocity left of own heading,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_longitudinal_acc_corrimu_mps2,float,m/s^2,CORRIMU,Leader longitudinal acceleration,source increment divided by per-row source CORRIMU sample interval
+koopman,leader_longitudinal_velocity_mps,float,m/s,INSPVAX projected,Leader velocity along own heading,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_minus_follower_heading_deg,float,degree,derived,"Wrapped heading difference in [-180,180)",WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_mode,string,-,experiment metadata,Leader control mode,role relabeling only
+koopman,leader_north_m,float,m,ENU,Leader north coordinate,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_up_m,float,m,ENU,Leader up coordinate,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_velocity_in_follower_lateral_left_mps,float,m/s,INSPVAX projected,Leader velocity in follower left axis,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_velocity_in_follower_longitudinal_mps,float,m/s,INSPVAX projected,Leader velocity in follower longitudinal axis,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_vertical_acc_corrimu_mps2,float,m/s^2,CORRIMU,Leader vertical acceleration,source increment divided by per-row source CORRIMU sample interval
+koopman,leader_vertical_velocity_mps,float,m/s,INSPVAX,Leader up velocity,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,leader_yaw_rate_corrimu_radps,float,rad/s,CORRIMU,Leader yaw rate,source increment divided by per-row source CORRIMU sample interval
+koopman,relative_lateral_velocity_left_mps,float,m/s,INSPVAX projected,Leader-minus-follower velocity in follower left axis,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,relative_longitudinal_acc_corrimu_mps2,float,m/s^2,CORRIMU,Leader-minus-follower longitudinal acceleration,source increment divided by per-row source CORRIMU sample interval
+koopman,relative_longitudinal_velocity_mps,float,m/s,INSPVAX projected,Leader-minus-follower velocity in follower longitudinal axis,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,relative_vertical_velocity_mps,float,m/s,INSPVAX,Leader-minus-follower up velocity,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,run_index,integer,-,metadata,Run number within case,1 to 3
+koopman,sample_index,integer,-,time grid,Zero-based sample index within trial,enumerated after decimation
+koopman,sample_rate_hz,float,Hz,time grid,Nominal output rate,fixed by file
+koopman,sensor_range_horizontal_m,float,m,ENU,Horizontal sensor-to-sensor range,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,sensor_spacing_longitudinal_m,float,m,ENU and follower heading,Leader-minus-follower sensor displacement projected longitudinally,WGS84 ECEF/ENU conversion and/or follower-frame projection as named
+koopman,t_rel_s,float,s,synchronized sample time,Time from selected window start,sample time minus selected window start
+koopman,trial_uid,string,-,metadata,Unique trial identifier,case plus run index
+koopman,vertical_separation_m,float,m,ENU,Leader up minus follower up,WGS84 ECEF/ENU conversion and/or follower-frame projection as named

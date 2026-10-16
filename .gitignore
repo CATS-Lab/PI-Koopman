@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+build/
+outputs/
+results/
+validation/
+data/working/
+data/external/openacc/raw/
+data/external/openacc/episodes.npz
+data/external/openacc/download_manifest_observed.json
+.DS_Store

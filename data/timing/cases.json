@@ -1,0 +1,1010 @@
+[
+  {
+    "id": "local_C000",
+    "dataset": "local",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C001",
+    "dataset": "local",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C002",
+    "dataset": "local",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 0.001,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C003",
+    "dataset": "local",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 0.001,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C004",
+    "dataset": "local",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C005",
+    "dataset": "local",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C006",
+    "dataset": "local",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C007",
+    "dataset": "local",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C008",
+    "dataset": "local",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C009",
+    "dataset": "local",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C010",
+    "dataset": "local",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C011",
+    "dataset": "local",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C012",
+    "dataset": "local",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 0.1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 1,
+          "kappa": 1,
+          "ridge": 0.1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C013",
+    "dataset": "local",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "kappa": 1,
+          "ridge": 0.1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 1,
+          "kappa": 1,
+          "ridge": 0.1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C014",
+    "dataset": "local",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C015",
+    "dataset": "local",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C016",
+    "dataset": "local",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 0.1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "local_C017",
+    "dataset": "local",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "kappa": 1,
+          "ridge": 10,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "kappa": 1,
+          "ridge": 0.1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C018",
+    "dataset": "openacc",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C019",
+    "dataset": "openacc",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C020",
+    "dataset": "openacc",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C021",
+    "dataset": "openacc",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C022",
+    "dataset": "openacc",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 1,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C023",
+    "dataset": "openacc",
+    "budget_s": 3,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 2,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C024",
+    "dataset": "openacc",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C025",
+    "dataset": "openacc",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C026",
+    "dataset": "openacc",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C027",
+    "dataset": "openacc",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C028",
+    "dataset": "openacc",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C029",
+    "dataset": "openacc",
+    "budget_s": 8,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C030",
+    "dataset": "openacc",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C031",
+    "dataset": "openacc",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C032",
+    "dataset": "openacc",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C033",
+    "dataset": "openacc",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C034",
+    "dataset": "openacc",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  },
+  {
+    "id": "openacc_C035",
+    "dataset": "openacc",
+    "budget_s": 15,
+    "rate_hz": 10,
+    "models": {
+      "PI-CTH": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "quadratic",
+          "prior": "cth"
+        },
+        "method": "expweak"
+      },
+      "PI-IDM": {
+        "config": {
+          "T": 0.5,
+          "ridge": 10,
+          "kappa": 1,
+          "dictionary": "cth",
+          "prior": "idm"
+        },
+        "method": "expweak"
+      }
+    }
+  }
+]
