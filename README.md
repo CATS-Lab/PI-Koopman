@@ -31,8 +31,8 @@ Clone the repository, then run:
 ```sh
 git clone https://github.com/CATS-Lab/PI-Koopman.git
 cd PI-Koopman
-python3.12 -m venv .venv
-source .venv/bin/activate
+conda create -n pi-koopman python=3.12 pip -y
+conda activate pi-koopman
 python -m pip install -e .
 python -m scripts.build_native
 ```
