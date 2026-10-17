@@ -5,8 +5,8 @@
       "openacc"
     ],
     "budgets_s": [
-      3,
       8,
+      12,
       15
     ],
     "rate_hz": 10,

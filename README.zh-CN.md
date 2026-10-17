@@ -44,10 +44,10 @@ python -m scripts.build_native
 ```sh
 python -m scripts.verify_data
 python -m scripts.smoke_test
-python -m experiments.run_prediction --dataset local --budget 3 --rate 10 --origin 20
+python -m experiments.run_prediction --dataset local --budget 8 --rate 10 --origin 20
 ```
 
-该示例使用 10 Hz、3 秒历史拟合 CTH、IDM 和两种 PI 模型，从第 20 秒起预测随后 5 秒。结果位于 `outputs/physics/grid/local_B3_Hz10_end20/`。
+该示例使用 10 Hz、8 秒历史拟合 CTH、IDM 和两种 PI 模型，从第 20 秒起预测随后 5 秒。结果位于 `outputs/physics/grid/local_B8_Hz10_end20/`。
 
 准备 OpenACC 数据：
 
@@ -58,7 +58,7 @@ python -m scripts.prepare_openacc
 
 ## 复现论文实验
 
-**历史时长比较**：使用 10 Hz、3/8/15 秒历史，预测随后 5 秒。运行全部七种模型并汇总：
+**历史时长比较**：使用 10 Hz、8/12/15 秒历史，预测随后 5 秒。运行全部七种模型并汇总：
 
 ```sh
 python -m experiments.run_main --axis duration --dataset local --models all
@@ -77,7 +77,7 @@ python -m experiments.summarize_prediction --axis rate --dataset local
 汇总结果位于 `outputs/summaries/`。完整神经搜索可能耗时数小时；紧凑训练示例：
 
 ```sh
-python -m experiments.neural_prediction --dataset local --budget 3 --rate 10 --origin 20 --stage compact
+python -m experiments.neural_prediction --dataset local --budget 8 --rate 10 --origin 20 --stage compact
 ```
 
 | 实验 | 命令 |

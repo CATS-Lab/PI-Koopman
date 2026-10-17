@@ -63,11 +63,11 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--device',default='cpu');p.add_argument('--label',required=True);p.add_argument('--output',required=True);a=p.parse_args()
     root=Path(__file__).resolve().parents[1];out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
     cases=json.loads((root/'data/timing/cases.json').read_text());arrays=np.load(root/'data/timing/state_arrays.npz');device=torch.device(a.device)
-    chosen=[next(c for c in cases if c['dataset']=='openacc' and c['budget_s']==b) for b in [3,8,15]]
+    chosen=[next(c for c in cases if c['dataset']=='openacc' and c['budget_s']==b) for b in sorted({c["budget_s"] for c in cases})]
     meta=dict(device=str(device),hardware_label=a.label,python=sys.version,platform=platform.platform(),
               torch=torch.__version__,torch_cuda_version=torch.version.cuda,torch_threads=torch.get_num_threads(),
               torch_interop_threads=torch.get_num_interop_threads(),dtype='float32',models_per_fit=1,
-              case_ids=[c['id'] for c in chosen],budgets_s=[3,8,15],rate_hz=10,updates=400,repetitions=3,
+              case_ids=[c['id'] for c in chosen],budgets_s=sorted({c["budget_s"] for c in chosen}),rate_hz=10,updates=400,repetitions=3,
               warmup_updates=20,seed=73,DNN_width=16,LSTM_width=8,training_horizon_s=1,LSTM_warmup_s=1,
               optimizer='Adam lr0.003 cosine decay over3000 updates, weight_decay1e-5, gradient norm cap10',
               loss='0.5*((gap_error/10)^2+speed_error^2), mean over1s rollout',
