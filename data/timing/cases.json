@@ -2,12 +2,12 @@
   {
     "id": "C000",
     "dataset": "local",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -17,7 +17,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 1,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -30,12 +30,12 @@
   {
     "id": "C001",
     "dataset": "local",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -45,7 +45,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 1,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -58,12 +58,12 @@
   {
     "id": "C002",
     "dataset": "local",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -86,12 +86,12 @@
   {
     "id": "C003",
     "dataset": "local",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -114,12 +114,12 @@
   {
     "id": "C004",
     "dataset": "local",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -129,7 +129,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -142,12 +142,12 @@
   {
     "id": "C005",
     "dataset": "local",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -157,7 +157,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -170,7 +170,7 @@
   {
     "id": "C006",
     "dataset": "local",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -198,7 +198,7 @@
   {
     "id": "C007",
     "dataset": "local",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -226,7 +226,7 @@
   {
     "id": "C008",
     "dataset": "local",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -254,7 +254,7 @@
   {
     "id": "C009",
     "dataset": "local",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -282,12 +282,12 @@
   {
     "id": "C010",
     "dataset": "local",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 1,
+          "T": 0.5,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -297,7 +297,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 1,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -310,12 +310,12 @@
   {
     "id": "C011",
     "dataset": "local",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 1,
+          "T": 0.5,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -325,7 +325,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 1,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -338,13 +338,13 @@
   {
     "id": "C012",
     "dataset": "local",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 2,
-          "ridge": 0.1,
+          "T": 0.5,
+          "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
           "prior": "cth"
@@ -353,7 +353,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 1,
+          "T": 2,
           "ridge": 0.1,
           "kappa": 1,
           "dictionary": "cth",
@@ -366,13 +366,13 @@
   {
     "id": "C013",
     "dataset": "local",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 2,
-          "ridge": 0.1,
+          "T": 0.5,
+          "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
           "prior": "cth"
@@ -381,7 +381,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 1,
+          "T": 2,
           "ridge": 0.1,
           "kappa": 1,
           "dictionary": "cth",
@@ -394,7 +394,7 @@
   {
     "id": "C014",
     "dataset": "local",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -422,7 +422,7 @@
   {
     "id": "C015",
     "dataset": "local",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -450,7 +450,7 @@
   {
     "id": "C016",
     "dataset": "local",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -466,7 +466,7 @@
       "PI-IDM": {
         "config": {
           "T": 0.5,
-          "ridge": 0.1,
+          "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
           "prior": "idm"
@@ -478,7 +478,7 @@
   {
     "id": "C017",
     "dataset": "local",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -494,7 +494,7 @@
       "PI-IDM": {
         "config": {
           "T": 0.5,
-          "ridge": 0.1,
+          "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
           "prior": "idm"
@@ -506,7 +506,7 @@
   {
     "id": "C018",
     "dataset": "openacc",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -521,7 +521,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -534,7 +534,7 @@
   {
     "id": "C019",
     "dataset": "openacc",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -549,7 +549,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -562,12 +562,12 @@
   {
     "id": "C020",
     "dataset": "openacc",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 1,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -577,7 +577,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -590,12 +590,12 @@
   {
     "id": "C021",
     "dataset": "openacc",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
         "config": {
-          "T": 0.5,
+          "T": 1,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "quadratic",
@@ -605,7 +605,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -618,7 +618,7 @@
   {
     "id": "C022",
     "dataset": "openacc",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -633,7 +633,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -646,7 +646,7 @@
   {
     "id": "C023",
     "dataset": "openacc",
-    "budget_s": 8,
+    "budget_s": 5,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -661,7 +661,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -674,7 +674,7 @@
   {
     "id": "C024",
     "dataset": "openacc",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -689,7 +689,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -702,7 +702,7 @@
   {
     "id": "C025",
     "dataset": "openacc",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -717,7 +717,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -730,7 +730,7 @@
   {
     "id": "C026",
     "dataset": "openacc",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -745,7 +745,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -758,7 +758,7 @@
   {
     "id": "C027",
     "dataset": "openacc",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -773,7 +773,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -786,7 +786,7 @@
   {
     "id": "C028",
     "dataset": "openacc",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -801,7 +801,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -814,7 +814,7 @@
   {
     "id": "C029",
     "dataset": "openacc",
-    "budget_s": 12,
+    "budget_s": 7,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -829,7 +829,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -842,7 +842,7 @@
   {
     "id": "C030",
     "dataset": "openacc",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -857,7 +857,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -870,7 +870,7 @@
   {
     "id": "C031",
     "dataset": "openacc",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -885,7 +885,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -898,7 +898,7 @@
   {
     "id": "C032",
     "dataset": "openacc",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -913,7 +913,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -926,7 +926,7 @@
   {
     "id": "C033",
     "dataset": "openacc",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -941,7 +941,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -954,7 +954,7 @@
   {
     "id": "C034",
     "dataset": "openacc",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -969,7 +969,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",
@@ -982,7 +982,7 @@
   {
     "id": "C035",
     "dataset": "openacc",
-    "budget_s": 15,
+    "budget_s": 11,
     "rate_hz": 10,
     "models": {
       "PI-CTH": {
@@ -997,7 +997,7 @@
       },
       "PI-IDM": {
         "config": {
-          "T": 0.5,
+          "T": 2,
           "ridge": 10,
           "kappa": 1,
           "dictionary": "cth",

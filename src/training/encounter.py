@@ -13,7 +13,7 @@ from src.data.openacc import crop, openacc
 OUT=ROOT/'outputs/neural/encounter'
 SEEDS=[73,211,347,509,863]
 CHECKPOINTS=[400,1200,3000]
-CONDITIONS=[(ds,b,25 if ds=='local' else 10) for ds in ['local','openacc'] for b in [3,8,15]]
+CONDITIONS=[(ds,b,10) for ds in ['local','openacc'] for b in [5,7,11]]
 torch.set_num_threads(2)
 
 def configs(family):

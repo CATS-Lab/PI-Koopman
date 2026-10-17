@@ -16,7 +16,7 @@ from src.evaluation.metrics import metric, grid
 
 OUT = ROOT / 'outputs/physics'
 ORIGINS = [15, 20, 24]
-BUDGETS = [3, 8, 15]
+BUDGETS = [5, 7, 11]
 RATES = [1, 5, 10, 25, 125]
 METHODS = ['CTH', 'IDM', 'PI-Koopman-CTH', 'PI-Koopman-IDM']
 PI = {'PI-Koopman-CTH': ('quadratic', 'cth'), 'PI-Koopman-IDM': ('cth', 'idm')}

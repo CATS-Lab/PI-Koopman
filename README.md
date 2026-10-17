@@ -44,10 +44,10 @@ CATS-CF data are included in the repository:
 ```sh
 python -m scripts.verify_data
 python -m scripts.smoke_test
-python -m experiments.run_prediction --dataset local --budget 8 --rate 10 --origin 20
+python -m experiments.run_prediction --dataset local --budget 5 --rate 10 --origin 20
 ```
 
-This fits CTH, IDM, and both PI models using 8 s of history at 10 Hz, then forecasts 5 s from a 20-s origin. Results are saved to `outputs/physics/grid/local_B8_Hz10_end20/`.
+This fits CTH, IDM, and both PI models using 5 s of history at 10 Hz, then forecasts 5 s from a 20-s origin. Results are saved to `outputs/physics/grid/local_B5_Hz10_end20/`.
 
 To prepare OpenACC:
 
@@ -58,16 +58,16 @@ python -m scripts.prepare_openacc
 
 ## Reproduce the paper
 
-**History duration:** 8/12/15-s histories at 10 Hz, followed by a 5-s forecast. Run all seven models and aggregate the results:
+**History duration:** 5/7/11-s histories at 10 Hz, with a common forecast origin at 20 s and a 5-s forecast. Run all seven models and aggregate the results:
 
 ```sh
 python -m experiments.run_main --axis duration --dataset local --models all
 python -m experiments.summarize_prediction --axis duration --dataset local
 ```
 
-Replace `local` with `openacc` for OpenACC. Use `--models physics` or `--models neural` to run model groups separately.
+Replace `local` with `openacc` for OpenACC. Use `--models physics` or `--models neural` to run model groups separately. Add `--device cuda:0` to `run_main` to train neural models on a CUDA device.
 
-**Sampling rate:** CATS-CF, 8-s histories at 1/5/10/25/125 Hz, with forecast origins at 15/20/24 s:
+**Sampling rate:** CATS-CF, 7-s histories at 1/5/10/25/125 Hz, with forecast origins at 15/20/24 s:
 
 ```sh
 python -m experiments.run_main --axis rate --dataset local --models all
@@ -77,7 +77,7 @@ python -m experiments.summarize_prediction --axis rate --dataset local
 Summaries are written to `outputs/summaries/`. Full neural searches can take hours; for a compact training example:
 
 ```sh
-python -m experiments.neural_prediction --dataset local --budget 8 --rate 10 --origin 20 --stage compact
+python -m experiments.neural_prediction --dataset local --budget 5 --rate 10 --origin 20 --stage compact
 ```
 
 | Experiment | Command |

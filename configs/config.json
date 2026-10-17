@@ -5,9 +5,9 @@
       "openacc"
     ],
     "budgets_s": [
-      8,
-      12,
-      15
+      5,
+      7,
+      11
     ],
     "rate_hz": 10,
     "origin_s": 20,
@@ -15,7 +15,7 @@
   },
   "rate": {
     "dataset": "local",
-    "budget_s": 8,
+    "budget_s": 7,
     "rates_hz": [
       1,
       5,

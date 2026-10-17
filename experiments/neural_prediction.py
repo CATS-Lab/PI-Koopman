@@ -36,12 +36,12 @@ def digest(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 def frozen_protocol():
     OUT.mkdir(parents=True,exist_ok=True)
-    p=dict(origins_s=[15,20,24],histories_s=[8,12,15],history_axis_rate_hz=10,
-        rate_axis_history_s=8,rate_axis_hz=[1,5,10,25,125],rate_axis_dataset='local',
+    p=dict(origins_s=[15,20,24],histories_s=[5,7,11],history_axis_rate_hz=10,
+        rate_axis_history_s=7,rate_axis_hz=[1,5,10,25,125],rate_axis_dataset='local',
         future_s=5,cohorts='42 local and284 OpenACC including existing source modes; primary ACC24/236.',
         old_cell_reuse='Exact existing source-selected origin20,10Hz results. New cells use same full selection procedure.',
         selection='Each target run/file excluded entirely. Every new cell repeats compact150/400, both valid numerical solvers, expanded400/1200 screening,source-only configuration,3000 and own-source conditional6000, lockedfive-seedrefit. Source errors alone select configuration, checkpoint and seeds within each evaluated duration/rate/origin condition.',
-        expanded_configs={str(b):{f:staged.grid(f,b) for f in ['DNN','LSTM']} for b in [8,12,15]},
+        expanded_configs={str(b):{f:staged.grid(f,b) for f in ['DNN','LSTM']} for b in [5,7,11]},
         seeds_screen=[73,211],seeds_final=[73,211,347,509,863],
         physical_time='Expanded rollout horizons0.4/1/2/5s and LSTM1s burnin;0.2s startspacing. Minimum1observed interval when0.4s inaccessible at1Hz. Compact0.4s horizon/stride,minimumoneobservedinterval; compact DNN/DeepKoopman/LSTM discount0.9**(k*10/rate), preserving0.1s physical-time discount at every rate and exactly unchanged10Hz.',
         observations='Same crop/resample as physical grid, within history only; native125Hz local and10Hz OpenACC scoretimes. Future follower labels never enter rollout.',
@@ -233,7 +233,7 @@ def fix_compact_metadata(cell,b,rate,origin):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--dataset',choices=['local','openacc'],default='local');p.add_argument('--budget',type=int,default=8);p.add_argument('--rate',type=int,default=10);p.add_argument('--origin',type=int,default=15);p.add_argument('--device',default='cpu');p.add_argument('--graph',action='store_true');p.add_argument('--stage',choices=['all','compact','expanded','report','pilot'],default='all');p.add_argument('--family',choices=['DNN','LSTM']);p.add_argument('--pilot-updates',type=int,default=50);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--dataset',choices=['local','openacc'],default='local');p.add_argument('--budget',type=int,default=5);p.add_argument('--rate',type=int,default=10);p.add_argument('--origin',type=int,default=20);p.add_argument('--device',default='cpu');p.add_argument('--graph',action='store_true');p.add_argument('--stage',choices=['all','compact','expanded','report','pilot'],default='all');p.add_argument('--family',choices=['DNN','LSTM']);p.add_argument('--pilot-updates',type=int,default=50);a=p.parse_args()
     frozen_protocol();cell=configure(a.dataset,a.budget,a.rate,a.origin,a.device,a.graph)
     if a.stage=='pilot':
         data=staged.bundle(a.dataset,a.budget,a.rate,staged.SCREEN);family=a.family or 'LSTM';cfg=staged.grid(family,a.budget)[0]
