@@ -1,10 +1,16 @@
 # CATS-CF & PI-Koopman
 
+[![arXiv](https://img.shields.io/badge/arXiv-2610.24588-b31b1b.svg)](https://arxiv.org/abs/2610.24588)
+
 [English](README.md) | 简体中文
 
-论文 **Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics** 的自采跟驰数据与核心实现。
+论文 **[Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics](https://arxiv.org/abs/2610.24588)** 的自采跟驰数据与核心实现。
 
 包含模型：CTH、IDM、PI-Koopman-CTH、PI-Koopman-IDM、DNN、LSTM 和 projected Deep Koopman。
+
+## 最新消息
+
+- **2026-10-17**：论文已上线 [arXiv](https://arxiv.org/abs/2610.24588)。如果本工作对您的研究有帮助，欢迎[引用我们的论文](#引用)。
 
 ## 数据
 
@@ -100,6 +106,22 @@ python -m experiments.neural_prediction --dataset local --budget 5 --rate 10 --o
 - `src/evaluation/`: 评价指标与识别工具
 - `experiments/`: 论文实验与结果汇总入口
 - `scripts/`: 编译、数据准备与检查工具
+
+## 引用
+
+如果您在研究中使用了本文、代码或 CATS-CF 数据集，欢迎引用：
+
+```bibtex
+@misc{li2026physicsinformedkoopmanlearningdataefficient,
+  title={Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics},
+  author={Hangyu Li and Yiming Meng and Zhaohui Liang and Yunqing Xiao and Yuxuan Chen and Bofeng Cao and Shixiao Liang and Jiaxi Liu and Haotian Shi and Melkior Ornik and Xiaopeng Li},
+  year={2026},
+  eprint={2610.24588},
+  archivePrefix={arXiv},
+  primaryClass={eess.SY},
+  url={https://arxiv.org/abs/2610.24588}
+}
+```
 
 ## 许可
 
