@@ -6,7 +6,22 @@ English | [简体中文](README.zh-CN.md)
 
 Self-collected car-following data and implementations for **[Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics](https://arxiv.org/abs/2610.24588)**.
 
-Models: CTH, IDM, PI-Koopman-CTH, PI-Koopman-IDM, DNN, LSTM, and projected Deep Koopman.
+<details>
+<summary><strong>Citation</strong> — Please cite when using CATS-CF or our algorithms/code (BibTeX).</summary>
+
+```bibtex
+@misc{li2026physicsinformedkoopmanlearningdataefficient,
+  title={Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics},
+  author={Hangyu Li and Yiming Meng and Zhaohui Liang and Yunqing Xiao and Yuxuan Chen and Bofeng Cao and Shixiao Liang and Jiaxi Liu and Haotian Shi and Melkior Ornik and Xiaopeng Li},
+  year={2026},
+  eprint={2610.24588},
+  archivePrefix={arXiv},
+  primaryClass={eess.SY},
+  url={https://arxiv.org/abs/2610.24588}
+}
+```
+
+</details>
 
 ## Data
 
@@ -110,22 +125,6 @@ All experiment results are written under `outputs/`.
 - `src/evaluation/`: Metrics and recognition helpers
 - `experiments/`: Paper experiment and aggregation entry points
 - `scripts/`: Native build, data preparation, and checks
-
-## Citation
-
-If you use CATS-CF or our algorithms/code, please cite:
-
-```bibtex
-@misc{li2026physicsinformedkoopmanlearningdataefficient,
-  title={Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics},
-  author={Hangyu Li and Yiming Meng and Zhaohui Liang and Yunqing Xiao and Yuxuan Chen and Bofeng Cao and Shixiao Liang and Jiaxi Liu and Haotian Shi and Melkior Ornik and Xiaopeng Li},
-  year={2026},
-  eprint={2610.24588},
-  archivePrefix={arXiv},
-  primaryClass={eess.SY},
-  url={https://arxiv.org/abs/2610.24588}
-}
-```
 
 ## License
 
