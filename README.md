@@ -10,12 +10,14 @@ Models: CTH, IDM, PI-Koopman-CTH, PI-Koopman-IDM, DNN, LSTM, and projected Deep 
 
 ## News
 
-- **2026-10-17**: Our paper is now available on [arXiv](https://arxiv.org/abs/2610.24588). If you find this work useful, please consider [citing our paper](#citation).
+- **2026-10-17**: Our paper is now available on [arXiv](https://arxiv.org/abs/2610.24588). We welcome you to read it and share your feedback. If you use CATS-CF or our algorithms, please [cite our paper](#citation).
 
 ## Data
 
 - **CATS-CF**: 42 leader–follower trials across 14 conditions, with three repetitions per condition. Includes ACC and human driving, with 15-s and 30-s windows. Tables provide local coordinates and relative time. Data live in `data/release/`; see [data structure and fields](DATA.md).
 - **OpenACC**: [official JRC download](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/). We use 284 30-s episodes from AstaZero and Casale. See [source and license details](data/external/openacc/README.md).
+
+CATS-CF will also be contributed to [OpenPAV](https://github.com/OpenPAV), an open platform led by our CATS Lab for production automated vehicle data, behavior modeling, and performance evaluation.
 
 CLI names: `local` = CATS-CF; `openacc` = OpenACC.
 
@@ -109,7 +111,7 @@ All experiment results are written under `outputs/`.
 
 ## Citation
 
-If you use our paper, code, or CATS-CF dataset in your research, please consider citing:
+If you use the CATS-CF dataset, our algorithms, or their implementations in your research, please cite our paper:
 
 ```bibtex
 @misc{li2026physicsinformedkoopmanlearningdataefficient,
