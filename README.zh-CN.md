@@ -8,18 +8,20 @@
 
 包含模型：CTH、IDM、PI-Koopman-CTH、PI-Koopman-IDM、DNN、LSTM 和 projected Deep Koopman。
 
-## 最新消息
-
-- **2026-10-17**：论文已上线 [arXiv](https://arxiv.org/abs/2610.24588)，欢迎阅读、参考与交流。如果您使用 CATS-CF 数据集或我们的算法，请[引用本文](#引用)。
-
 ## 数据
 
 - **CATS-CF**：42 个双车跟驰试验，覆盖 14 种条件，每种重复 3 次，包含 ACC 和人工驾驶，提供 15 秒及 30 秒窗口。数据提供局部坐标与相对时间。数据位于 `data/release/`，详见[数据结构与字段](DATA.md)。
 - **OpenACC**：[JRC 官方下载](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/)。本文使用 AstaZero 和 Casale 的 284 个 30 秒片段，详见[来源与许可说明](data/external/openacc/README.md)。
 
-CATS-CF 也将贡献到由我们 CATS Lab 牵头的 [OpenPAV](https://github.com/OpenPAV) 开放平台，支持量产自动驾驶车辆的数据共享、行为建模与性能评估。
-
 命令参数中，`local` 表示 CATS-CF，`openacc` 表示 OpenACC。
+
+### OpenPAV
+
+<a href="https://openpav.github.io/OpenPAV/">
+  <img src="https://openpav.github.io/OpenPAV/images/method.png" alt="OpenPAV: data collection, behavior modeling, and performance evaluation" width="640">
+</a>
+
+CATS-CF 将贡献到 [OpenPAV](https://openpav.github.io/OpenPAV/) 这一综合开源平台，支持自动驾驶车辆的数据共享、行为建模与评估。
 
 ## 安装
 
@@ -111,7 +113,7 @@ python -m experiments.neural_prediction --dataset local --budget 5 --rate 10 --o
 
 ## 引用
 
-如果您在研究中使用 CATS-CF 数据集、我们的算法或代码实现，请引用本文：
+使用 CATS-CF 数据或本项目算法、代码时，请引用：
 
 ```bibtex
 @misc{li2026physicsinformedkoopmanlearningdataefficient,
