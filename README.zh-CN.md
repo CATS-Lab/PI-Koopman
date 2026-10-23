@@ -12,7 +12,7 @@
 ```bibtex
 @misc{li2026physicsinformedkoopmanlearningdataefficient,
   title={Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics},
-  author={Hangyu Li and Yiming Meng and Zhaohui Liang and Yunqing Xiao and Yuxuan Chen and Bofeng Cao and Shixiao Liang and Jiaxi Liu and Haotian Shi and Melkior Ornik and Xiaopeng Li},
+  author={Hangyu Li and Yiming Meng and Zhaohui Liang and Yunqing Xiao and Yuxuan Chen and Bofeng Cao and Shixiao Liang and Jiaxi Liu and Haotian Shi and Xiaopeng Li},
   year={2026},
   eprint={2610.24588},
   archivePrefix={arXiv},
