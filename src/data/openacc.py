@@ -1,39 +1,72 @@
-"""Transparent, non-overlapping official OpenACC subset and paired corruption."""
+"""Load OpenACC trajectories and select the paper's 30-second observations."""
+import hashlib
 from pathlib import Path
-import json,hashlib
+
 import numpy as np
 import pandas as pd
+
 from src.data.trials import Trial
-from src.paths import ROOT
-def openacc(build=False):
-    out=ROOT/'data/external/openacc';records=[];trials=[]
-    for path in sorted((out/'raw').glob('*/*.csv')):
-        if 'specifications' in path.name:continue
-        lines=path.read_text().splitlines();header=next(i for i,l in enumerate(lines) if l.startswith('Time,'))
-        meta={l.split(',')[0]:[x for x in l.split(',')[1:] if x] for l in lines[:header]}
-        df=pd.read_csv(path,skiprows=header);n=int(meta['Number_of_vehicles'][0])
-        for follower in range(2,n+1):
-            candidates=[]
-            for start in range(0,len(df)-300+1,300):
-                block=df.iloc[start:start+300];t=block.Time.to_numpy();t=t-t[0]
-                v=block[f'Speed{follower}'].to_numpy();u=block[f'Speed{follower-1}'].to_numpy();s=block[f'IVS{follower-1}'].to_numpy()
-                a=np.c_[s,v,u-v];modes=block[f'Driver{follower}'].astype(str).str.strip().unique()
-                good=len(modes)==1 and modes[0] in ['ACC','Human'] and np.isfinite(a).all() and np.all(s>0) and np.all(v>=0) and np.all(u>=0) and np.max(abs(np.diff(t)-.1))<1e-4
-                if not good:continue
-                uid=f'{path.parent.name}_{path.stem}_F{follower}_B{start//300:04d}'
-                tr=Trial(uid,path.stem,modes[0],0,np.arange(300)/10,a,u,np.zeros(300))
-                vehicle=meta['Vehicle_order'][follower-1]
-                rec=dict(uid=uid,campaign=path.parent.name,source_file=path.name,source_row_start=start,source_time_start=float(block.Time.iloc[0]),follower_index=follower,vehicle=vehicle,mode=modes[0],distance_setting=meta.get('Distance_setting',['unknown'])[0],gap_min=float(s.min()),leader_speed_range_mps=float(np.ptp(u)),follower_speed_range_mps=float(np.ptp(v)))
-                candidates.append((tr,rec))
-            if not candidates:continue
-            for j in np.unique(np.rint(np.linspace(0,len(candidates)-1,min(6,len(candidates)))).astype(int)):
-                tr,rec=candidates[j];rec['qualifying_blocks_for_file_pair']=len(candidates);trials.append(tr);records.append(rec)
-    manifest=pd.DataFrame(records)
-    if build:
-        manifest.to_csv(out/'episode_manifest.csv',index=False)
-        np.savez_compressed(out/'episodes.npz',uid=np.array([tr.uid for tr in trials]),t=trials[0].t,z=np.array([tr.z for tr in trials]),u=np.array([tr.u for tr in trials]))
-    return trials,manifest
+from src.paths import OPENACC_RAW
+
+
+TRAJECTORIES = {
+    "AstaZero": [f"ASta_040719_platoon{i}.csv" for i in range(3, 11)]
+                + [f"ASta_050719_platoon{i}.csv" for i in (1, 2)],
+    "Casale": [f"part{i}.csv" for i in range(3, 12)],
+}
+
+
+def openacc(build=False, *, raw_dir=None):
+    """Return the trials and their source rows in memory, including for legacy build calls."""
+    root = Path(raw_dir) if raw_dir is not None else OPENACC_RAW
+    trials, records = [], []
+    for campaign, files in TRAJECTORIES.items():
+        for name in sorted(files):
+            path = root / campaign / name
+            if not path.is_file():
+                raise FileNotFoundError(f"Missing {path}. Run python -m scripts.download_openacc.")
+            lines = path.read_text().splitlines()
+            header = next(i for i, line in enumerate(lines) if line.startswith("Time,"))
+            meta = {parts[0]: [v for v in parts[1:] if v]
+                    for parts in (line.split(",") for line in lines[:header])}
+            data = pd.read_csv(path, skiprows=header)
+            for follower in range(2, int(meta["Number_of_vehicles"][0]) + 1):
+                candidates = []
+                for start in range(0, len(data) - 299, 300):
+                    block = data.iloc[start:start + 300]
+                    t = block.Time.to_numpy()
+                    t = t - t[0]
+                    v = block[f"Speed{follower}"].to_numpy()
+                    u = block[f"Speed{follower - 1}"].to_numpy()
+                    gap = block[f"IVS{follower - 1}"].to_numpy()
+                    state = np.column_stack((gap, v, u - v))
+                    modes = block[f"Driver{follower}"].astype(str).str.strip().unique()
+                    if (len(modes) != 1 or modes[0] not in ("ACC", "Human")
+                            or not np.isfinite(state).all() or not np.all(gap > 0)
+                            or not np.all(v >= 0) or not np.all(u >= 0)
+                            or not np.all(np.abs(np.diff(t) - 0.1) < 1e-4)):
+                        continue
+                    uid = f"{campaign}_{path.stem}_F{follower}_B{start // 300:04d}"
+                    trial = Trial(uid, path.stem, modes[0], 0, np.arange(300) / 10,
+                                  state, u, np.zeros(300))
+                    record = dict(uid=uid, campaign=campaign, source_file=name,
+                                  source_row_start=start, source_time_start=float(block.Time.iloc[0]),
+                                  follower_index=follower, vehicle=meta["Vehicle_order"][follower-1],
+                                  mode=modes[0], distance_setting=meta.get("Distance_setting", ["unknown"])[0],
+                                  gap_min=float(gap.min()), leader_speed_range_mps=float(np.ptp(u)),
+                                  follower_speed_range_mps=float(np.ptp(v)))
+                    candidates.append((trial, record))
+                count = len(candidates)
+                for index in np.rint(np.linspace(0, count - 1, min(6, count))).astype(int):
+                    trial, record = candidates[index]
+                    trials.append(trial)
+                    records.append(dict(record, qualifying_blocks_for_file_pair=count))
+    return trials, pd.DataFrame(records)
+
+
 def crop(tr,a,b,rate=None):
+    if a < tr.t[0]-1e-6 or b > tr.t[-1]+1e-6 or b < a:
+        raise ValueError(f'{tr.uid}: requested [{a:g}, {b:g}] s outside available [{tr.t[0]:g}, {tr.t[-1]:g}] s; choose an interval fully inside the recording.')
     mask=(tr.t>=a-1e-6)&(tr.t<=b+1e-6);idx=np.flatnonzero(mask)
     if rate is not None:
         native=round(1/np.median(np.diff(tr.t)));stride=int(round(native/rate));assert abs(native/stride-rate)<1e-6

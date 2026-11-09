@@ -33,6 +33,8 @@ def resample(tr, start, end, rate):
         result=crop(tr,start,end,rate)
     else:
         # Restrict the interpolation support before evaluating any target point.
+        if start < tr.t[0]-1e-6 or end > tr.t[-1]+1e-6:
+            raise ValueError(f'{tr.uid}: requested history is outside the released recording')
         keep=(tr.t>=start-1e-6)&(tr.t<=end+1e-6)
         tt=np.arange(int(round((end-start)*rate))+1)/rate+start
         source=tr.t[keep]

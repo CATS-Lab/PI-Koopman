@@ -8,6 +8,7 @@ import pandas as pd
 import torch
 from torch import nn
 from src.data.trials import ROOT, load_trials
+from src.paths import OPENACC_RAW
 from src.data.openacc import crop, openacc
 
 OUT=ROOT/'outputs/neural/encounter'
@@ -54,7 +55,7 @@ def advance(x,acc,u0,u1,dt,mu,sc):
     return (torch.stack([sn,vn,u1-vn],-1)-mu)/sc
 
 def bundle(dataset,budget,rate):
-    trials,path=load_trials(30,125) if dataset=='local' else (openacc()[0],ROOT/'data/external/openacc/episode_manifest.csv')
+    trials,path=load_trials(30,125) if dataset=='local' else (openacc()[0],OPENACC_RAW)
     train=[crop(t,20-budget,20,rate) for t in trials];test=[crop(t,20,25) for t in trials]
     z=np.array([t.z for seed in SEEDS for t in train],dtype=np.float32);u=np.array([t.u for seed in SEEDS for t in train],dtype=np.float32)
     mu=z.mean(1,keepdims=True);sc=np.maximum(z.std(1,keepdims=True),np.array([1.,.5,.5],np.float32))

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Compact DNN and projected Deep Koopman training on 30-s encounters."""
+from src.paths import OPENACC_RAW
 from src.models.neural import *
 OUT = ROOT/'outputs/neural/compact/neural'
+
 
 def run(dataset,budget,rate,scenario='clean',corruption_seed=0,checkpoints=DEFAULT_CHECKPOINTS,pilot=False,force=False,frozen_selection_path=None):
     tag=f'{dataset}_B{budget}_Hz{rate}_{scenario}_{corruption_seed}';out=OUT/(tag+'_pilot' if pilot else tag);out.mkdir(parents=True,exist_ok=True)
     if (out/'summary.csv').exists() and not force:print('Already complete',tag,flush=True);return
     if dataset=='local':trials,path=load_trials(30,125);meta=None;end=20
-    else:trials,meta=openacc();path=ROOT/'data/external/openacc/episode_manifest.csv';end=20
+    else:trials,meta=openacc();path=OPENACC_RAW;end=20
     if pilot:trials=trials[:14];meta=None if meta is None else meta.iloc[:14].copy()
     # Corrupt the native parent once before decimation, exactly as the physical benchmark.
     observed=[corrupt(tr,scenario,corruption_seed) for tr in trials]
@@ -21,7 +23,7 @@ def run(dataset,budget,rate,scenario='clean',corruption_seed=0,checkpoints=DEFAU
     dt=float(np.median(np.diff(train[0].t)));substeps=max(1,int(math.ceil(dt/MAX_STEP-1e-8)));h=dt/substeps
     rows=[];predictions=[];lossrows=[];consistency=[];all_started=time.perf_counter()
     training_audit=dict(n_trials=n,train_samples=raw.shape[1],train_start_s=end-budget,train_end_s=end,observed_rate_hz=rate,observed_step_s=dt,internal_substeps_per_observed_interval=substeps,internal_step_s=h,training_horizon_samples=H,training_horizon_s=H*dt,n_sequences_per_trial=len(starts),clean_reference_forecast_step_s=float(np.median(np.diff(test[0].t))),clean_reference_forecast_samples=len(test[0].t),no_hidden_high_rate_calibration_targets=True)
-    config=dict(dataset=dataset,budget_s=budget,rate_hz=rate,scenario=scenario,corruption_seed=corruption_seed,neural_initializations=SEEDS,checkpoints=checkpoints,families=FAMILIES,architecture='individual-object width16x16 tanh DNN and6latent projected controlled DeepKoopman; independent parameters for every trial/init',koopman_scope='new Tian-style adaptation with raw s,v,d coordinates and learned latent, linear generator plus observed leader increments; enforce d=u-v and kinematic gap; not exact paper reproduction or exact finite-dimensional invariant closure',training='Adam lr0.003 weight_decay1e-5, loss sum over independent objects; per-object gradient norm cap10; physical normalized multi-step error plus0.1 latent consistency forDK',prediction='same clean dense observed future leader and clean observed initial state as primary physical benchmark; Euler generator substeps<=.04, trapezoid spacing; no follower teacher forcing',normalization='own calibration window mean/std only; floors1/.5/.5',selection='other run index(local) or other source-file stem(OpenACC); average neural seeds per source trial; pick checkpoint only; retain both seeds',failure='nonfinite or |gap|>1e4 or |speed|>1e3 stops trial; same fixed1e4m/1e3m/s penalties',training_audit=training_audit,frozen_selection_path=str(frozen_selection_path) if frozen_selection_path else None,data_file=str(path),data_sha256=hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None,script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+    config=dict(dataset=dataset,budget_s=budget,rate_hz=rate,scenario=scenario,corruption_seed=corruption_seed,neural_initializations=SEEDS,checkpoints=checkpoints,families=FAMILIES,architecture='individual-object width16x16 tanh DNN and6latent projected controlled DeepKoopman; independent parameters for every trial/init',koopman_scope='new Tian-style adaptation with raw s,v,d coordinates and learned latent, linear generator plus observed leader increments; enforce d=u-v and kinematic gap; not exact paper reproduction or exact finite-dimensional invariant closure',training='Adam lr0.003 weight_decay1e-5, loss sum over independent objects; per-object gradient norm cap10; physical normalized multi-step error plus0.1 latent consistency forDK',prediction='same clean dense observed future leader and clean observed initial state as primary physical benchmark; Euler generator substeps<=.04, trapezoid spacing; no follower teacher forcing',normalization='own calibration window mean/std only; floors1/.5/.5',selection='other run index(local) or other source-file stem(OpenACC); average neural seeds per source trial; pick checkpoint only; retain both seeds',failure='nonfinite or |gap|>1e4 or |speed|>1e3 stops trial; same fixed1e4m/1e3m/s penalties',training_audit=training_audit,frozen_selection_path=str(frozen_selection_path) if frozen_selection_path else None,data_file=str(path),script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     (out/'config.json').write_text(json.dumps(config,indent=2))
     for family in FAMILIES:
         net=initialize(n,family);opt=torch.optim.Adam(net.parameters(),lr=.003,weight_decay=1e-5);started=time.perf_counter();m=n*len(SEEDS);npar=sum(p.numel() for p in net.parameters())//m

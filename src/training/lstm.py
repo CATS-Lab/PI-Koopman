@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Compact LSTM training on 30-s encounters."""
+from src.paths import OPENACC_RAW
 from src.models.lstm import *
 OUT = ROOT/'outputs/neural/compact/lstm'
+
 
 def run(dataset, budget, rate):
     tag = f'{dataset}_B{budget}_Hz{rate}_clean_0'; out = OUT/tag; out.mkdir(parents=True, exist_ok=True)
@@ -11,7 +13,7 @@ def run(dataset, budget, rate):
     if dataset=='local':
         trials, path = load_trials(30, 125); meta = None; end = 20
     else:
-        trials, meta = openacc(); path = ROOT/'data/external/openacc/episode_manifest.csv'; end = 20
+        trials, meta = openacc(); path = OPENACC_RAW; end = 20
     train = [crop(tr, end-budget, end, rate) for tr in trials]
     test = [crop(tr, end, end+5) for tr in trials]
     n = len(trials); m = n*len(SEEDS)
@@ -33,7 +35,6 @@ def run(dataset, budget, rate):
                   sequence_stride_samples=stride, n_sequences_per_trial=len(starts),
                   train_samples=raw.shape[1], train_start_s=end-budget, train_end_s=end,
                   no_hidden_high_rate_calibration_targets=True, data_file=str(path),
-                  data_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
                   protocol_file=str(OUT/'protocol_frozen.json'),
                   script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     (out/'config.json').write_text(json.dumps(config, indent=2))

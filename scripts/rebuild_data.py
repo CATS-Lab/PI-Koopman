@@ -1,19 +1,16 @@
-"""Rebuild only the main-text 15/30-s releases into a separate directory."""
-import argparse, pathlib, sys
-import pandas as pd
-root=pathlib.Path(__file__).resolve().parents[1]
-from src.data.release import select_all_runs, write_variant
-from src.data.privacy import sanitize_release
+"""Export 42 synchronized 30-second car-following CSV tables."""
+import argparse
+from pathlib import Path
+
+from src.data.release import export_recordings
+
+
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--input',type=pathlib.Path,required=True,help='Directory containing private synchronized parent tables');p.add_argument('--output',type=pathlib.Path,default=root/'outputs/rebuilt_data');a=p.parse_args()
-    if a.output.resolve()==(root/'data/release').resolve():
-        raise SystemExit('Use a separate output directory to preserve frozen data.')
-    for seconds in (15,30):
-        table=pd.read_csv(a.input/f'synchronized_pairs_{seconds}s_125hz.csv.gz')
-        selected,manifest=select_all_runs(table,seconds,optimize_subwindow=seconds!=15)
-        write_variant(a.output,f'{seconds}s',selected,manifest,seconds)
-    sanitize_release(a.output)
-    print(a.output)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, required=True, help="Root of the paired vehicle log folders")
+    parser.add_argument("--output", type=Path, default=Path("outputs/rebuilt_data"))
+    args = parser.parse_args()
+    print(f"{export_recordings(args.input, args.output)} trials")
 
 
 if __name__ == "__main__":

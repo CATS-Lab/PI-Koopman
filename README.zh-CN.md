@@ -25,8 +25,8 @@
 
 ## 数据
 
-- **CATS-CF**：42 个双车跟驰试验，覆盖 14 种条件，每种重复 3 次，包含 ACC 和人工驾驶，提供 15 秒及 30 秒窗口。数据提供局部坐标与相对时间。数据位于 `data/release/`，详见[数据结构与字段](DATA.md)。
-- **OpenACC**：[JRC 官方下载](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/)。本文使用 AstaZero 和 Casale 的 284 个 30 秒片段，详见[来源与许可说明](data/external/openacc/README.md)。
+- **CATS-CF**：42 个双车跟驰试验，覆盖 14 种条件，每种重复 3 次。`data/release/` 每张 CSV 保存 30 秒、125 Hz 的双车局部位置、速度、航向、校正 IMU 加速度及横摆角速度、定位质量，以及车距和相对速度。41 张表完整包含原 15 秒实验片段，`ACC1_follows_HV2_run01` 还需要表起点之前的观测。样本偏移写在 `src/data/windows.py` 中。
+- **OpenACC**：[JRC 官方下载](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/)。本文使用 AstaZero 和 Casale 的 284 个 30 秒片段。[Makridis 等](https://doi.org/10.1016/j.trc.2021.103047) · [JRC 数据集](https://doi.org/10.2905/JRC.KMH3D00)。
 
 命令参数中，`local` 表示 CATS-CF，`openacc` 表示 OpenACC。
 
@@ -78,7 +78,6 @@ python -m experiments.run_prediction --dataset local --budget 5 --rate 10 --orig
 
 ```sh
 python -m scripts.download_openacc
-python -m scripts.prepare_openacc
 ```
 
 ## 复现论文实验
@@ -108,10 +107,12 @@ python -m experiments.neural_prediction --dataset local --budget 5 --rate 10 --o
 | 实验 | 命令 |
 |---|---|
 | 已知律响应场重建 | `python -m experiments.synthetic_benchmark` |
-| 配对采样率／噪声一致性 | `python -m experiments.rate_consistency` |
-| PI 残差的 ACC／人工跟驰识别 | `python -m experiments.recognition` |
+| 配对采样率／噪声一致性（修订中） | `python -m experiments.rate_consistency` |
+| PI 残差的 ACC／人工跟驰识别（修订中） | `python -m experiments.recognition` |
 | 物理／PI 模型计时 | `python -m experiments.timing_physics --label my-cpu --output outputs/timing_cpu` |
 | 神经模型计时 | `python -m experiments.timing_neural --device cpu --label my-cpu --output outputs/timing_neural` |
+
+上述测量一致性与识别入口保留原 15 秒实验方案，正在适配更新后的数据；预测命令使用当前 30 秒表。
 
 实验网格见 [configs/config.json](configs/config.json)。运行与汇总脚本均支持通过 `--config PATH` 指定另一套网格配置。
 
@@ -128,4 +129,4 @@ python -m experiments.neural_prediction --dataset local --budget 5 --rate 10 --o
 
 ## 许可
 
-代码采用 [MIT](LICENSE)，CATS-CF 数据采用 [CC BY 4.0](LICENSE-DATA)。OpenACC 的来源与版权声明见[数据说明](data/external/openacc/README.md)。
+代码采用 [MIT](LICENSE)，CATS-CF 数据采用 [CC BY 4.0](LICENSE-DATA)。OpenACC © European Union，CC BY 4.0（[AstaZero](data/external/openacc/AstaZero_copyright.txt)、[Casale](data/external/openacc/Casale_copyright.txt)）。

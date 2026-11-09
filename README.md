@@ -25,8 +25,8 @@ Self-collected car-following data and implementations for **[Physics-Informed Ko
 
 ## Data
 
-- **CATS-CF**: 42 leader–follower trials across 14 conditions, with three repetitions per condition. Includes ACC and human driving, with 15-s and 30-s windows. Tables provide local coordinates and relative time. Data live in `data/release/`; see [data structure and fields](DATA.md).
-- **OpenACC**: [official JRC download](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/). We use 284 30-s episodes from AstaZero and Casale. See [source and license details](data/external/openacc/README.md).
+- **CATS-CF**: 42 leader–follower trials across 14 conditions, with three repetitions per condition. Each CSV in `data/release/` contains 30 seconds at 125 Hz: both vehicles' local positions, velocities, heading, corrected IMU acceleration/yaw rate, positioning quality, and pairwise gap/relative speed. The original 15-second windows are contained in 41 tables; `ACC1_follows_HV2_run01` requires observations preceding its table. Sample offsets are in `src/data/windows.py`.
+- **OpenACC**: [official JRC download](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/). We use 284 30-s episodes from AstaZero and Casale. [Makridis et al.](https://doi.org/10.1016/j.trc.2021.103047) · [JRC dataset](https://doi.org/10.2905/JRC.KMH3D00).
 
 CLI names: `local` = CATS-CF; `openacc` = OpenACC.
 
@@ -78,7 +78,6 @@ To prepare OpenACC:
 
 ```sh
 python -m scripts.download_openacc
-python -m scripts.prepare_openacc
 ```
 
 ## Reproduce the paper
@@ -108,10 +107,12 @@ python -m experiments.neural_prediction --dataset local --budget 5 --rate 10 --o
 | Experiment | Command |
 |---|---|
 | Known-law response-field reconstruction | `python -m experiments.synthetic_benchmark` |
-| Paired sampling-rate/noise consistency | `python -m experiments.rate_consistency` |
-| ACC/manual recognition from PI residuals | `python -m experiments.recognition` |
+| Paired sampling-rate/noise consistency (under revision) | `python -m experiments.rate_consistency` |
+| ACC/manual recognition from PI residuals (under revision) | `python -m experiments.recognition` |
 | Physical/PI timing | `python -m experiments.timing_physics --label my-cpu --output outputs/timing_cpu` |
 | Neural timing | `python -m experiments.timing_neural --device cpu --label my-cpu --output outputs/timing_neural` |
+
+The sensing and recognition entry points above retain the original 15-second protocols and are being revised for the updated data. The prediction commands use the current 30-second tables.
 
 Grid settings: [configs/config.json](configs/config.json). `run_main.py` and `summarize_prediction.py` accept `--config PATH` to use another grid.
 
@@ -128,4 +129,4 @@ All experiment results are written under `outputs/`.
 
 ## License
 
-Code: [MIT](LICENSE). CATS-CF data: [CC BY 4.0](LICENSE-DATA). OpenACC attribution and copyright notices are in the [data notes](data/external/openacc/README.md).
+Code: [MIT](LICENSE). CATS-CF data: [CC BY 4.0](LICENSE-DATA). OpenACC © European Union, CC BY 4.0 ([AstaZero](data/external/openacc/AstaZero_copyright.txt), [Casale](data/external/openacc/Casale_copyright.txt)).

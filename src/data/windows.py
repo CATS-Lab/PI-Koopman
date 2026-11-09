@@ -10,6 +10,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+# Native sample offsets of the original 15 s windows in the published 30 s tables.
+# The other 38 start at zero. A negative offset means the recording starts too late.
+PAPER_15_START_SAMPLES = {
+    "ACC1_follows_HV2_run01": -573,  # Original 0–15 s starts 4.584 s before this table.
+    "HV1_follows_ACC1_run01": 1587,  # 12.696 s
+    "HV1_follows_ACC2_run03": 1194,  # 9.552 s
+    "HV2_follows_ACC2_run02": 128,   # 1.024 s
+}
+
 from src.data.geometry import BASE_HZ, FLOAT_FORMAT, GAP_OFFSET_M, RATES_HZ, decimate, make_data_dictionary, make_koopman_table, make_quality_long, make_quality_manifest, role_mode, role_values
 
 
@@ -29,6 +38,29 @@ def add_case_columns(pair: pd.DataFrame) -> pd.DataFrame:
 def sliding_sum(values: np.ndarray, width: int) -> np.ndarray:
     cumulative = np.r_[0, np.cumsum(values)]
     return cumulative[width:] - cumulative[:-width]
+
+
+def paper_slice_start(table, uid, duration):
+    """Return an exact native sample index; never search for a new 15 s window."""
+    if duration == 15:
+        start = PAPER_15_START_SAMPLES.get(uid, 0)
+        if start < 0:
+            raise ValueError(f"{uid}: the original 15 s window starts {-start / BASE_HZ:g} s before this 30 s table; original raw observations are required. No replacement window was selected.")
+        return start
+    if duration == 30:
+        return 0
+    if duration not in (20, 25):
+        raise ValueError("Supported analysis windows are 15, 20, 25 and 30 s")
+    if "leader_ins_status" not in table:
+        raise ValueError("Historical 20/25 s status-selected windows require the original receiver logs; the public tables retain position_std_m only.")
+    width = int(duration * BASE_HZ)
+    ins = table[[f"{r}_ins_status" for r in ("leader", "follower")]].to_numpy()
+    pos = table[[f"{r}_position_type" for r in ("leader", "follower")]].to_numpy()
+    error = table[[f"{r}_position_std_m" for r in ("leader", "follower")]].sum(axis=1).to_numpy()
+    bad = ((ins != 3) + np.isin(pos, [0, 53]).astype(int)).sum(axis=1)
+    floating = (pos == 55).sum(axis=1)
+    starts = np.arange(len(table) - width + 1)
+    return int(np.lexsort((starts, sliding_sum(error, width), sliding_sum(floating, width), sliding_sum(bad, width)))[0])
 
 
 def status_arrays(group: pd.DataFrame) -> dict[str, np.ndarray]:
@@ -308,3 +340,52 @@ def source_materialization_summary(raw_root: Path) -> dict:
 
 
 
+
+
+def paper_window_start(navigation, duration):
+    """Select a CATS-CF paper window inside the common navigation interval."""
+    duration = float(duration)
+    if duration <= 0 or not np.isfinite(duration) or not (duration * BASE_HZ).is_integer():
+        raise ValueError("Window length must be a positive whole number of native samples")
+    # The 20/25 s analyses used subwindows of the 30 s selection.
+    nested = duration in (20, 25)
+    parent_duration = 30 if nested else duration
+    cars = [navigation.dropna(subset=[f"{role}_ins_status"]) for role in ("leader", "follower")]
+    start = max(car.t_rel_s.iloc[0] for car in cars)
+    end = min(car.t_rel_s.iloc[-1] for car in cars)
+    if end - start < parent_duration - 1e-8:
+        raise ValueError(f"Common interval is too short for a {parent_duration:g} s window")
+    candidates = start + np.arange(0., end - start - parent_duration + 0.5 / BASE_HZ, 1 / BASE_HZ)
+    severe = np.zeros(len(candidates), dtype=int)
+    degraded = np.zeros_like(severe)
+    for role, car in zip(("leader", "follower"), cars):
+        t = car.t_rel_s.to_numpy()
+        left, right = np.searchsorted(t, candidates), np.searchsorted(t, candidates + parent_duration)
+        ins_bad = car[f"{role}_ins_status"].ne(3).to_numpy(dtype=int)
+        pos = car[f"{role}_position_type"]
+        for scores, flags in ((severe, ins_bad + pos.isin([0, 53])), (degraded, ins_bad + pos.ne(56))):
+            prefix = np.r_[0, np.cumsum(flags)]
+            scores += prefix[right] - prefix[left]
+    best = candidates[np.lexsort((candidates, degraded, severe))[0]]
+    if not nested:
+        return best
+    # Reuse the same status and precision ordering as the original nested-window selection.
+    size = int(duration * BASE_HZ)
+    grid = best + np.arange(parent_duration * BASE_HZ) / BASE_HZ
+    bad = np.zeros(len(grid), dtype=int)
+    floating = np.zeros_like(bad)
+    error = np.zeros(len(grid))
+    for role, car in zip(("leader", "follower"), cars):
+        t = car.t_rel_s.to_numpy()
+        ix = np.searchsorted(t, grid).clip(0, len(t) - 1)
+        prev = np.maximum(ix - 1, 0)
+        ix = np.where(np.abs(grid - t[prev]) <= np.abs(grid - t[ix]), prev, ix)
+        pos = car[f"{role}_position_type"].to_numpy()[ix]
+        bad += car[f"{role}_ins_status"].to_numpy()[ix] != 3
+        bad += np.isin(pos, [0, 53])
+        floating += pos == 55
+        error += np.hypot(*(np.interp(grid, t, car[f"{role}_{axis}_position_stdev_m"])
+                            for axis in ("north", "east")))
+    shifts = np.arange(len(grid) - size + 1)
+    index = np.lexsort((shifts, sliding_sum(error, size), sliding_sum(floating, size), sliding_sum(bad, size)))[0]
+    return best + index / BASE_HZ

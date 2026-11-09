@@ -195,5 +195,5 @@ def unit_checks():
 
 if __name__=='__main__':
     OUT.mkdir(parents=True,exist_ok=True)
-    pd.DataFrame(unit_checks()).to_csv(OUT/'sbp_checks.csv',index=False)
+    print(pd.DataFrame(unit_checks()).to_string(index=False))
     print('SBP checks passed; API ready')

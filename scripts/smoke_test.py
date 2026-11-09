@@ -29,7 +29,7 @@ def main():
     for name in ['experiments.neural_prediction','src.training.staged']:
      importlib.import_module(name)
     report=dict(weak_constant_acceleration_max_error=max(x['acceleration_error'] for x in checks),native_python_max_abs_errors=errors,neural_unit_checks=True,recognition_synthetic_checks=True)
-    (root/'outputs/checks').mkdir(parents=True,exist_ok=True);(root/'outputs/checks/smoke.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
+    print(json.dumps(report))
 
 
 if __name__ == "__main__":

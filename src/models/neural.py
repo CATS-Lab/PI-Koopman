@@ -99,6 +99,6 @@ def tests():
         # Each model block is independent of the inputs to another object.
         poison=x.clone();poison[1]+=100.;state2=net.initial(poison);out2=net.step(state2,u0,u1,.04,torch.tensor(mu),torch.tensor(scale));assert torch.equal(out[0],out2[0])
         result.append(dict(family=family,relative_speed_identity=True,trapezoid_spacing_identity=True,independent_object_parameter_blocks=True))
-    write_csv(OUT/'implementation_tests.csv',result);print(result,flush=True)
+    print(result, flush=True)
 
 

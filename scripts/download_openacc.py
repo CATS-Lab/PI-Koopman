@@ -1,14 +1,18 @@
 """Download official JRC campaigns without changing their contents."""
-from pathlib import Path
 from urllib.request import urlopen
 from concurrent.futures import ThreadPoolExecutor
 import time
 
-ROOT=Path(__file__).resolve().parents[1]
+from src.data.openacc import TRAJECTORIES
+from src.paths import OPENACC_RAW
+
 BASE='https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/'
-OUT=ROOT/'data/external/openacc/raw'
-FILES={'Casale':['Casale_notes.txt','Veh_specifications.csv','copyright.txt']+[f'part{i}.csv' for i in range(3,12)],
-       'AstaZero':['AstaZero_notes.txt','AstaZero_veh_specifications.csv','copyright.txt']+[f'ASta_040719_platoon{i}.csv' for i in range(3,11)]+[f'ASta_050719_platoon{i}.csv' for i in range(1,3)]}
+OUT = OPENACC_RAW
+
+FILES = {
+    "Casale": ["Casale_notes.txt", "Veh_specifications.csv", "copyright.txt", *TRAJECTORIES["Casale"]],
+    "AstaZero": ["AstaZero_notes.txt", "AstaZero_veh_specifications.csv", "copyright.txt", *TRAJECTORIES["AstaZero"]],
+}
 
 def fetch(item):
     campaign,name=item;path=OUT/campaign/name;path.parent.mkdir(parents=True,exist_ok=True)
