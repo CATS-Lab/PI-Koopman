@@ -15,9 +15,6 @@ from src.evaluation.metrics import grid, metric
 from src.training.prediction import PI
 from src.models import physics, koopman as koop
 
-SCENARIOS = [("clean", 0)] + [
-    (kind, seed) for kind in ("white", "correlated") for seed in (1101, 1102, 1103)
-]
 METHODS = ["fd", "integral", "weak", "expweak"]
 
 
@@ -61,9 +58,9 @@ def evaluate(task):
     (ds, obj, tr, truth), configs = task
     rows = []
     ref = {}
-    for noise, seed in SCENARIOS:
+    for noise, seed in replays.NOISE:
         observed = corrupt(tr, noise, seed)
-        for end in (15, 20, 24):
+        for end in replays.ORIGINS:
             x = crop(observed, end - 7, end)
             probes = crop(tr, end - 7, end).z[10:]
             for name, (dictionary, family) in PI.items():

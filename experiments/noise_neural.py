@@ -13,14 +13,10 @@ import torch
 from src.models import neural
 from src.training import encounter, staged
 from src.data.trials import load_trials
-from src.data.openacc import openacc, observation_errors
-from src.data.replays import records
+from src.data.openacc import noisy_state, openacc
+from src.data.replays import NOISE, ORIGINS, records
 
 SEEDS = (73, 211, 347, 509, 863)
-ORIGINS = (15, 20, 24)
-NOISE = [("clean", 0)] + [
-    (kind, k) for kind in ("white", "correlated") for k in (1101, 1102, 1103)
-]
 DEEP = "DeepKoopman-projected"
 
 
@@ -331,15 +327,6 @@ def responses(family, clean, device):
     return evaluate
 
 
-def noisy(z, uid, noise, seed):
-    if noise == "clean":
-        return z
-    e = observation_errors(uid, len(z), 0.1, noise, seed)
-    v = z[:, 1] + e[:, 1]
-    u = z[:, 1] + z[:, 2] + e[:, 2]
-    return np.c_[z[:, 0] + e[:, 0], v, u - v]
-
-
 def run(args):
     folder = args.input
     out = args.output
@@ -382,8 +369,6 @@ def run(args):
             for block in range(0, len(indices), args.response_batch):
                 group = indices[block : block + args.response_batch]
                 path = out / f"field_{family}_{variant}_{updates}_{block}.csv"
-                if path.exists():
-                    continue
                 rows = []
                 for origin in ORIGINS:
                     sl = slice((origin - 7) * 10, origin * 10 + 1)
@@ -393,7 +378,7 @@ def run(args):
                     # Fit clean/noise pairs together using identical initial weights.
                     batch = np.stack(
                         [
-                            noisy(z[i], uids[j], noise, seed)[sl]
+                            noisy_state(z[i], uids[j], noise, seed)[sl]
                             for j, i in enumerate(group)
                             for noise, seed in NOISE
                         ]

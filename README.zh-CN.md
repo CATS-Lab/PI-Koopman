@@ -59,6 +59,8 @@ python -m experiments.timing local 7 --device cpu
 
 DNN、LSTM 各自固定结构和训练流程。采样率实验沿用 7 秒参考条件的组外参数。先为两个数据集各生成历史长度实验汇总，再运行噪声实验和计时。单个物理预测条件可用 `python -m experiments.run_prediction --dataset local --budget 7 --rate 10 --origin 20`；主实验网格位于 `configs/config.json`。计时命令可分别指定两个数据集和 5、7、11 秒历史；神经网络可用 `--device cuda`。输出保存在 `outputs/`。
 
+10 Hz 噪声实验对独立噪声和时间相关噪声各使用三个配对随机种子。车距误差标准差为 0.2 m，两车速度误差标准差各为 0.1 m；分别将两车速度限制为非负，再计算相对速度。全部 3,380 条实车和配套仿真记录参与比较。
+
 ## 许可
 
 代码采用 [MIT](LICENSE)，CATS-CF 数据采用 [CC BY 4.0](LICENSE-DATA)。OpenACC © European Union，CC BY 4.0（[AstaZero](data/OpenACC/AstaZero_copyright.txt)、[Casale](data/OpenACC/Casale_copyright.txt)）。

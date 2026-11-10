@@ -1,6 +1,7 @@
 """Aggregate paired errors over seeds and origins before averaging encounters."""
 
 from src.paths import OUTPUTS
+from src.data.replays import NOISE, ORIGINS
 
 import argparse
 from pathlib import Path
@@ -9,20 +10,30 @@ import pandas as pd
 
 
 def summarize(folder):
-    metrics = ["change", "signed_change", "truth_rmse"]
     blocks = [pd.read_csv(folder / "response_physics.csv")]
     blocks.extend(
         pd.read_csv(f) for f in sorted((folder / "neural").glob("field_*.csv"))
     )
     data = pd.concat(blocks, ignore_index=True)
+    return summarize_responses(data, folder)
+
+
+def summarize_responses(data, folder):
+    metrics = ["change", "signed_change", "truth_rmse"]
     keys = ["dataset", "object", "uid", "model", "noise", "origin", "noise_seed"]
-    if data.duplicated(keys).any() or len(data) != 3380 * 13 * 3 * 7:
-        raise ValueError(
-            "Expected 3,380 records, 13 methods, three origins and seven noise realizations"
-        )
-    by = data.groupby(keys[:3], sort=False)
-    if not by.size().eq(13 * 3 * 7).all() or not by.model.nunique().eq(13).all():
-        raise ValueError("Incomplete method comparison")
+    paired_keys = ["dataset", "object", "uid", "origin", "noise", "noise_seed"]
+    per_record = data.groupby(keys[:3], sort=False).size()
+    scenarios = set(zip(data.noise, data.noise_seed))
+    if (
+        len(per_record) != 3380
+        or data.duplicated(keys).any()
+        or scenarios != set(NOISE)
+        or set(data.origin) != set(ORIGINS)
+        or data.model.nunique() != 13
+        or not per_record.eq(13 * len(NOISE) * len(ORIGINS)).all()
+        or not data.groupby(paired_keys).size().eq(13).all()
+    ):
+        raise ValueError("Incomplete paired response comparison")
     if (
         not np.isfinite(data[metrics[:2]]).all().all()
         or not np.isfinite(data.loc[data.object != "recorded", "truth_rmse"]).all()

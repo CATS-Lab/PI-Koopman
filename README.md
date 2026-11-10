@@ -59,6 +59,8 @@ python -m experiments.timing local 7 --device cpu
 
 Training DNN and LSTM uses fixed architectures and one grouped selection procedure. The 7-second reference transfers its settings to each rate and origin. Run the two duration summaries before the noise and timing experiments. For a single physical prediction condition, use `python -m experiments.run_prediction --dataset local --budget 7 --rate 10 --origin 20`. The main grid is in `configs/config.json`. The timing command accepts either dataset and budgets 5, 7 and 11. GPU neural fits use `--device cuda`. Results are created in `outputs/`.
 
+The 10 Hz noise experiment uses three paired realizations of independent or time-correlated errors (gap SD 0.2 m, speed SD 0.1 m per vehicle). Each absolute speed has a lower bound of zero. Relative speed is computed from the perturbed speeds. All 3,380 recorded and simulated follower records enter the comparison.
+
 ## License
 
 Code: [MIT](LICENSE). CATS-CF data: [CC BY 4.0](LICENSE-DATA). OpenACC © European Union, CC BY 4.0 ([AstaZero](data/OpenACC/AstaZero_copyright.txt), [Casale](data/OpenACC/Casale_copyright.txt)).

@@ -12,6 +12,12 @@ params = [
 ]
 
 
+ORIGINS = (15, 20, 24)
+NOISE = [("clean", 0)] + [
+    (kind, seed) for kind in ("white", "correlated") for seed in (1101, 1102, 1103)
+]
+
+
 def field(law, style, z, u):
     tau, ks, kv, amax, b, lag = params[style]
     if law == "lagged" and style == 2:

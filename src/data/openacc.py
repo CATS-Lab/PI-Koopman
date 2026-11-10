@@ -127,24 +127,24 @@ def observation_errors(uid, count, dt, scenario, seed):
             errors[i] = rho * errors[i - 1] + np.sqrt(1 - rho * rho) * errors[i]
     elif scenario != "white":
         raise ValueError(scenario)
-    return errors * np.array([0.5, 0.1, 0.1])
+    return errors * np.array([0.2, 0.1, 0.1])
+
+
+def noisy_state(z, uid, scenario, seed, dt=0.1):
+    """Perturb measured gap and absolute speeds on the observation clock."""
+    if scenario == "clean":
+        return z
+    errors = observation_errors(uid, len(z), dt, scenario, seed)
+    gap = z[:, 0] + errors[:, 0]
+    if not np.all(gap > 0.1):
+        raise ValueError(f"{uid}: observed gap at or below 0.1 m")
+    follower = np.maximum(0.0, z[:, 1] + errors[:, 1])
+    leader = np.maximum(0.0, z[:, 1] + z[:, 2] + errors[:, 2])
+    return np.column_stack((gap, follower, leader - follower))
 
 
 def corrupt(tr, scenario, seed):
     if scenario == "clean":
         return tr
-    noise = observation_errors(
-        tr.uid, len(tr.t), np.median(np.diff(tr.t)), scenario, seed
-    )
-    s = tr.z[:, 0] + noise[:, 0]
-    v = tr.z[:, 1] + noise[:, 1]
-    u = tr.u + noise[:, 2]
-    return Trial(
-        tr.uid,
-        tr.case,
-        tr.mode,
-        tr.run,
-        tr.t.copy(),
-        np.c_[s, v, u - v],
-        u,
-    )
+    z = noisy_state(tr.z, tr.uid, scenario, seed, np.median(np.diff(tr.t)))
+    return Trial(tr.uid, tr.case, tr.mode, tr.run, tr.t.copy(), z, z[:, 1] + z[:, 2])
