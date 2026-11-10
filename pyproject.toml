@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pikoopman"
 version = "0.1.0"
+authors = [{ name = "Hangyu Li" }]
 description = "Physics-informed Koopman learning and CATS-CF experiments"
 requires-python = ">=3.12"
 dynamic = ["dependencies"]
@@ -14,7 +15,7 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src", "src.*"]
+include = ["src", "src.*", "experiments", "scripts"]
 
 [tool.setuptools.package-data]
 "src.models" = ["native.c"]

@@ -1,4 +1,5 @@
 """Show the available OpenACC cases after downloading the trajectories."""
+
 from src.data.openacc import openacc
 
 if __name__ == "__main__":

@@ -1,15 +1,14 @@
 CATS-CF data
 Copyright (c) 2026 CATS-CF contributors
 
-The CATS-CF data in data/release/ are
+The CATS-CF data in data/CATS-CF/ are
 licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
 Attribute CATS-CF / CATS Lab and cite the accompanying paper named in README.md.
 Local-coordinate and relative-time exports omit absolute navigation/time fields.
 
-OpenACC files in data/external/openacc/ and OpenACC-derived timing inputs
+OpenACC files in data/OpenACC/
 retain the European Union's CC BY 4.0 license and attribution notices.
-The CATS-CF-derived timing inputs in data/timing/ use CC BY 4.0.
-Python code under data/scripts/ is covered by the repository MIT license.
+Python code is covered by the repository MIT license.
 
 License: https://creativecommons.org/licenses/by/4.0/
 

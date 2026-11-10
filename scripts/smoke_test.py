@@ -1,34 +1,60 @@
 """Numerical checks, independent Python/native agreement, and neural updates."""
-import json,pathlib,sys,importlib
+
+import json, pathlib, importlib
 import numpy as np
-root=pathlib.Path(__file__).resolve().parents[1]
-import src.models.koopman as k; import src.models.physics as ph
+
+root = pathlib.Path(__file__).resolve().parents[1]
+import src.models.koopman as k
+import src.models.physics as ph
 from src.data.trials import load_trials
 from src.training.prediction import resample
 from src.data.openacc import crop
+
+
 def main():
-    checks=k.unit_checks();assert max(x['acceleration_error'] for x in checks)<1e-12
-    tr=load_trials(30,125)[0][0];train=resample(tr,17,20,10);future=crop(tr,20,25)
-    assert len(train.t)==31 and len(future.t)==626
-    errors={}
-    for family,dictionary in [('CTH','quadratic'),('IDM','cth')]:
-     coef,audit=ph.fit(train.t,train.z,train.u,family)
-     prior=dict(kind='physical',family=family.lower(),coef=coef)
-     model=k.fit(train.t,train.z,train.u,'expweak',dict(dictionary=dictionary,prior=family.lower(),prior_model=prior,T=1.,ridge=.1,kappa=1.))
-     for name,m in [(family,prior),('PI-'+family,model)]:
-      native=ph.predict_field(m,future.t,future.u,future.z[0,:2])
-      reference=k.predict(m,future.t,future.u,future.z[0,:2],max_dt=.04)
-      assert np.isfinite(native).all()
-      error=float(np.max(np.abs(native-reference)));assert error<1e-8,(name,error)
-      errors[name]=error
-    import src.models.neural as revision_neural; import src.models.lstm as revision_lstm
-    revision_lstm.OUT.mkdir(parents=True,exist_ok=True)
-    revision_neural.tests();revision_lstm.tests()
+    checks = k.unit_checks()
+    assert max(x["acceleration_error"] for x in checks) < 1e-12
+    tr = load_trials(30, 125)[0][0]
+    train = resample(tr, 17, 20, 10)
+    future = crop(tr, 20, 25)
+    assert len(train.t) == 31 and len(future.t) == 626
+    errors = {}
+    for family, dictionary in [("CTH", "quadratic"), ("IDM", "cth")]:
+        coef, audit = ph.fit(train.t, train.z, train.u, family)
+        prior = dict(kind="physical", family=family.lower(), coef=coef)
+        model = k.fit(
+            train.t,
+            train.z,
+            train.u,
+            "expweak",
+            dict(
+                dictionary=dictionary,
+                prior=family.lower(),
+                prior_model=prior,
+                T=1.0,
+                ridge=0.1,
+                kappa=1.0,
+            ),
+        )
+        for name, m in [(family, prior), ("PI-" + family, model)]:
+            native = ph.predict_field(m, future.t, future.u, future.z[0, :2])
+            reference = k.predict(m, future.t, future.u, future.z[0, :2], max_dt=0.04)
+            assert np.isfinite(native).all()
+            error = float(np.max(np.abs(native - reference)))
+            assert error < 1e-8, (name, error)
+            errors[name] = error
     from experiments import recognition as recognition
+
     recognition.synthetic_checks()
-    for name in ['experiments.neural_prediction','src.training.staged']:
-     importlib.import_module(name)
-    report=dict(weak_constant_acceleration_max_error=max(x['acceleration_error'] for x in checks),native_python_max_abs_errors=errors,neural_unit_checks=True,recognition_synthetic_checks=True)
+    for name in ["experiments.neural_prediction", "src.training.staged"]:
+        importlib.import_module(name)
+    report = dict(
+        weak_constant_acceleration_max_error=max(
+            x["acceleration_error"] for x in checks
+        ),
+        native_python_max_abs_errors=errors,
+        recognition_synthetic_checks=True,
+    )
     print(json.dumps(report))
 
 

@@ -1,4 +1,5 @@
 """Build one synchronized car-following table per CATS-CF field trial."""
+
 from pathlib import Path
 import re
 
@@ -29,7 +30,9 @@ def paired_recordings(raw):
         for log in sorted(condition.iterdir()):
             if match := LOG.fullmatch(log.name):
                 _, date, clock = match.groups()
-                stamp = pd.Timestamp(f"{date} {clock[:2]}:{clock[2:4]}:{clock[4:]}").value
+                stamp = pd.Timestamp(
+                    f"{date} {clock[:2]}:{clock[2:4]}:{clock[4:]}"
+                ).value
                 groups[match[1]].append((stamp, log / "csv_out"))
         if len(groups["Red"]) != len(groups["Black"]) or not groups["Red"]:
             raise ValueError(f"Unpaired vehicle recordings under {condition}")
@@ -41,24 +44,37 @@ def paired_recordings(raw):
             paths = {"r": red_dir, "b": mate[1]}
             pairs.append((red_time + mate[0], paths))
         case = f"{second[1:]}_follows_{first[1:]}"
-        for run, (_, paths) in enumerate(sorted(pairs, key=lambda item: item[0]), start=1):
+        for run, (_, paths) in enumerate(
+            sorted(pairs, key=lambda item: item[0]), start=1
+        ):
             yield case, run, {"leader": paths[first[0]], "follower": paths[second[0]]}
 
 
 def following_table(paths, uid):
-    nav = {role: pd.read_csv(folder / "bynav_inspvax.csv") for role, folder in paths.items()}
+    nav = {
+        role: pd.read_csv(folder / "bynav_inspvax.csv")
+        for role, folder in paths.items()
+    }
     clocks = {role: gps_seconds(frame) for role, frame in nav.items()}
     if any(np.any(np.diff(t) <= 0) for t in clocks.values()):
         raise ValueError(f"Nonmonotonic navigation clock in {uid}")
     anchor = min(t[0] for t in clocks.values())
     common_start = max(t[0] for t in clocks.values())
-    origin = [np.mean([np.interp(common_start, clocks[k], frame[col]) for k, frame in nav.items()])
-              for col in ("latitude", "longitude", "height")]
+    origin = [
+        np.mean(
+            [np.interp(common_start, clocks[k], frame[col]) for k, frame in nav.items()]
+        )
+        for col in ("latitude", "longitude", "height")
+    ]
     xyz0 = geodetic_to_ecef(*origin)
     parts = []
     for role, frame in nav.items():
         values = frame[["ins_status.status", "pos_type.type"]].rename(
-            columns={"ins_status.status": f"{role}_ins_status", "pos_type.type": f"{role}_position_type"})
+            columns={
+                "ins_status.status": f"{role}_ins_status",
+                "pos_type.type": f"{role}_position_type",
+            }
+        )
         values.index = pd.Index(clocks[role] - anchor, name="t_rel_s")
         parts.append(values)
     status = pd.concat(parts, axis=1).sort_index().reset_index()
@@ -71,17 +87,28 @@ def following_table(paths, uid):
         t = clocks[role] - anchor
         xyz = geodetic_to_ecef(frame.latitude, frame.longitude, frame.height)
         east, north, _ = ecef_to_enu(*xyz, *origin[:2], *xyz0)
-        fields = {"x_m": east, "y_m": north, "vx_mps": frame.east_velocity,
-                  "vy_mps": frame.north_velocity, "heading_deg": frame.azimuth}
+        fields = {
+            "x_m": east,
+            "y_m": north,
+            "vx_mps": frame.east_velocity,
+            "vy_mps": frame.north_velocity,
+            "heading_deg": frame.azimuth,
+        }
         for name, values in fields.items():
             out[f"{role}_{name}"] = np.interp(target, t, values)
         out[f"{role}_position_std_m"] = np.hypot(
-            np.interp(target, t, frame.latitude_stdev), np.interp(target, t, frame.longitude_stdev))
+            np.interp(target, t, frame.latitude_stdev),
+            np.interp(target, t, frame.longitude_stdev),
+        )
         angle = np.deg2rad(out[f"{role}_heading_deg"])
-        out[f"{role}_v_lon_mps"] = out[f"{role}_vx_mps"] * np.sin(angle) + out[f"{role}_vy_mps"] * np.cos(angle)
+        out[f"{role}_v_lon_mps"] = out[f"{role}_vx_mps"] * np.sin(angle) + out[
+            f"{role}_vy_mps"
+        ] * np.cos(angle)
         # Vehicle axes follow the receiver convention: longitudinal forward,
         # lateral right. Global x/y columns remain east/north.
-        out[f"{role}_v_lat_mps"] = out[f"{role}_vx_mps"] * np.cos(angle) - out[f"{role}_vy_mps"] * np.sin(angle)
+        out[f"{role}_v_lat_mps"] = out[f"{role}_vx_mps"] * np.cos(angle) - out[
+            f"{role}_vy_mps"
+        ] * np.sin(angle)
 
         corr = pd.read_csv(paths[role] / "bynav_corrimudata.csv")
         imu_t = gps_seconds(corr) - anchor
@@ -90,12 +117,24 @@ def following_table(paths, uid):
             raise ValueError(f"Invalid corrected IMU clock in {uid}")
         # CORRIMUDATA contains angular/velocity increments per IMU sample.
         increments = pd.DataFrame({"t_rel_s": imu_t})
-        for name, source in [("yaw_rate_radps", "yaw_rate"), ("acc_lon_mps2", "longitudinal_acc"),
-                             ("acc_lat_mps2", "lateral_acc")]:
+        for name, source in [
+            ("yaw_rate_radps", "yaw_rate"),
+            ("acc_lon_mps2", "longitudinal_acc"),
+            ("acc_lat_mps2", "lateral_acc"),
+        ]:
             increments[name] = corr[source].to_numpy() / np.r_[np.median(dt), dt]
-        matched = pd.merge_asof(pd.DataFrame({"t_rel_s": t}), increments, on="t_rel_s",
-                                direction="nearest", tolerance=0.05).dropna()
-        if len(matched) < 2 or target[0] < matched.t_rel_s.iloc[0] - 1e-8 or target[-1] > matched.t_rel_s.iloc[-1] + 1e-8:
+        matched = pd.merge_asof(
+            pd.DataFrame({"t_rel_s": t}),
+            increments,
+            on="t_rel_s",
+            direction="nearest",
+            tolerance=0.05,
+        ).dropna()
+        if (
+            len(matched) < 2
+            or target[0] < matched.t_rel_s.iloc[0] - 1e-8
+            or target[-1] > matched.t_rel_s.iloc[-1] + 1e-8
+        ):
             raise ValueError(f"Missing corrected IMU coverage in {uid}")
         for name in increments.columns[1:]:
             out[f"{role}_{name}"] = np.interp(target, matched.t_rel_s, matched[name])
@@ -107,9 +146,22 @@ def following_table(paths, uid):
     out["gap_m"] = out.distance_m - GAP_OFFSET_M
     leader_along_follower = out.leader_vx_mps * sin + out.leader_vy_mps * cos
     out["relative_v_mps"] = leader_along_follower - out.follower_v_lon_mps
-    fields = ["x_m", "y_m", "vx_mps", "vy_mps", "heading_deg", "v_lon_mps", "v_lat_mps",
-              "acc_lon_mps2", "acc_lat_mps2", "yaw_rate_radps", "position_std_m"]
-    columns = ["t_s"] + [f"{role}_{name}" for role in ("leader", "follower") for name in fields]
+    fields = [
+        "x_m",
+        "y_m",
+        "vx_mps",
+        "vy_mps",
+        "heading_deg",
+        "v_lon_mps",
+        "v_lat_mps",
+        "acc_lon_mps2",
+        "acc_lat_mps2",
+        "yaw_rate_radps",
+        "position_std_m",
+    ]
+    columns = ["t_s"] + [
+        f"{role}_{name}" for role in ("leader", "follower") for name in fields
+    ]
     columns += ["distance_m", "gap_m", "relative_v_mps"]
     out = out[columns]
     if not np.isfinite(out.to_numpy()).all():
@@ -126,5 +178,7 @@ def export_recordings(raw, output):
     output.mkdir(parents=True, exist_ok=True)
     for case, run, paths in runs:
         uid = f"{case}_run{run:02d}"
-        following_table(paths, uid).to_csv(output / f"{uid}.csv", index=False, float_format="%.17g")
+        following_table(paths, uid).to_csv(
+            output / f"{uid}.csv", index=False, float_format="%.17g"
+        )
     return len(runs)

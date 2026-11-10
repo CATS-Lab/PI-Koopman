@@ -4,7 +4,7 @@
 
 [English](README.md) | 简体中文
 
-论文 **[Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics](https://arxiv.org/abs/2610.24588)** 的自采跟驰数据与核心实现。
+CATS-CF 跟驰数据集与 PI-Koopman 实验代码，配套论文为 **[Physics-Informed Koopman Learning for Data-Efficient System Identification of Automated Vehicle Dynamics](https://arxiv.org/abs/2610.24588)**。
 
 <details>
 <summary><strong>引用</strong> — 使用 CATS-CF 数据或本项目算法、代码时，请引用（展开 BibTeX）。</summary>
@@ -23,12 +23,11 @@
 
 </details>
 
-## 数据
+## 数据与代码
 
-- **CATS-CF**：42 个双车跟驰试验，覆盖 14 种条件，每种重复 3 次。`data/release/` 每张 CSV 保存 30 秒、125 Hz 的双车局部位置、速度、航向、校正 IMU 加速度及横摆角速度、定位质量，以及车距和相对速度。41 张表完整包含原 15 秒实验片段，`ACC1_follows_HV2_run01` 还需要表起点之前的观测。样本偏移写在 `src/data/windows.py` 中。
-- **OpenACC**：[JRC 官方下载](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/TransportExpData/JRCDBT0001/LATEST/)。本文使用 AstaZero 和 Casale 的 284 个 30 秒片段。[Makridis 等](https://doi.org/10.1016/j.trc.2021.103047) · [JRC 数据集](https://doi.org/10.2905/JRC.KMH3D00)。
+实验代码作者为 Hangyu Li。`data/CATS-CF/` 中的 42 张公开表各含 30 秒、125 Hz 的双车同步观测；实验片段均相对于各表的起点。OpenACC 从 AstaZero 和 Casale 选取 284 段 30 秒记录。命令中的 `local` 代表 CATS-CF，`openacc` 代表 OpenACC。
 
-命令参数中，`local` 表示 CATS-CF，`openacc` 表示 OpenACC。
+原始双车日志可用 `python -m scripts.rebuild_data --input RAW --output DEST` 重建公开表。OpenACC 来源为[欧盟 JRC](https://doi.org/10.2905/JRC.KMH3D00)。
 
 ### OpenPAV
 
@@ -38,95 +37,28 @@
 
 CATS-CF 将贡献到 [OpenPAV](https://openpav.github.io/OpenPAV/) 这一综合开源平台，支持自动驾驶车辆的数据共享、行为建模与评估。
 
-## 安装
-
-运行环境：**macOS arm64（Python 3.12.14）**和 **Linux x86_64（Python 3.12.15）**，均使用 CPU。需要 C99 编译器（通过 `cc` 调用，或设置 `CC`）。
-
-| 依赖 | 版本 |
-|---|---|
-| NumPy | 2.5.3 |
-| SciPy | 1.18.1 |
-| pandas | 2.2.3 |
-| scikit-learn | 1.9.1 |
-| PyTorch | 2.14.0 |
-| threadpoolctl | 3.7.0 |
-
-克隆仓库后执行：
+## 复现实验
 
 ```sh
-git clone https://github.com/CATS-Lab/PI-Koopman.git
-cd PI-Koopman
-conda create -n pi-koopman python=3.12 pip -y
-conda activate pi-koopman
 python -m pip install -e .
 python -m scripts.build_native
-```
-
-## 快速开始
-
-仓库已包含 CATS-CF 数据，直接执行：
-
-```sh
 python -m scripts.verify_data
-python -m scripts.smoke_test
-python -m experiments.run_prediction --dataset local --budget 5 --rate 10 --origin 20
-```
-
-该示例使用 10 Hz、5 秒历史拟合 CTH、IDM 和两种 PI 模型，从第 20 秒起预测随后 5 秒。结果位于 `outputs/physics/grid/local_B5_Hz10_end20/`。
-
-准备 OpenACC 数据：
-
-```sh
 python -m scripts.download_openacc
-```
-
-## 复现论文实验
-
-**历史时长比较**：使用 10 Hz、5/7/11 秒历史，在共同的第 20 秒起点预测随后 5 秒。运行全部七种模型并汇总：
-
-```sh
-python -m experiments.run_main --axis duration --dataset local --models all
+python -m experiments.run_main --axis duration --dataset both
 python -m experiments.summarize_prediction --axis duration --dataset local
-```
-
-将 `local` 替换为 `openacc` 即可运行 OpenACC。可用 `--models physics` 或 `--models neural` 分别运行两组模型。在 `run_main` 命令中添加 `--device cuda:0` 可使用 CUDA 训练神经模型。
-
-**采样率比较**：CATS-CF，7 秒历史，1/5/10/25/125 Hz，预测起点为第 15/20/24 秒：
-
-```sh
-python -m experiments.run_main --axis rate --dataset local --models all
+python -m experiments.summarize_prediction --axis duration --dataset openacc
+python -m experiments.run_main --axis rate --dataset local
 python -m experiments.summarize_prediction --axis rate --dataset local
+python -m experiments.recognition
+python -m experiments.noise_response --workers 4
+python -m experiments.noise_neural --prepare --input outputs/noise/observations
+python -m experiments.noise_neural --input outputs/noise/observations --device cpu
+python -m experiments.summarize_noise
+python -m experiments.timing local 7 --device cpu
 ```
 
-汇总结果位于 `outputs/summaries/`。完整神经搜索可能耗时数小时；紧凑训练示例：
-
-```sh
-python -m experiments.neural_prediction --dataset local --budget 5 --rate 10 --origin 20 --stage compact
-```
-
-| 实验 | 命令 |
-|---|---|
-| 已知律响应场重建 | `python -m experiments.synthetic_benchmark` |
-| 配对采样率／噪声一致性（修订中） | `python -m experiments.rate_consistency` |
-| PI 残差的 ACC／人工跟驰识别（修订中） | `python -m experiments.recognition` |
-| 物理／PI 模型计时 | `python -m experiments.timing_physics --label my-cpu --output outputs/timing_cpu` |
-| 神经模型计时 | `python -m experiments.timing_neural --device cpu --label my-cpu --output outputs/timing_neural` |
-
-上述测量一致性与识别入口保留原 15 秒实验方案，正在适配更新后的数据；预测命令使用当前 30 秒表。
-
-实验网格见 [configs/config.json](configs/config.json)。运行与汇总脚本均支持通过 `--config PATH` 指定另一套网格配置。
-
-## 仓库结构
-
-所有实验结果统一写入 `outputs/`。
-
-- `src/models/`: 物理、Koopman 和神经模型实现
-- `src/training/`: 训练与按来源分组的模型选择
-- `src/data/`: 数据加载、几何处理、窗口选择与公开导出
-- `src/evaluation/`: 评价指标与识别工具
-- `experiments/`: 论文实验与结果汇总入口
-- `scripts/`: 编译、数据准备与检查工具
+DNN、LSTM 各自固定结构和训练流程。采样率实验沿用 7 秒参考条件的组外参数。先为两个数据集各生成历史长度实验汇总，再运行噪声实验和计时。单个物理预测条件可用 `python -m experiments.run_prediction --dataset local --budget 7 --rate 10 --origin 20`；主实验网格位于 `configs/config.json`。计时命令可分别指定两个数据集和 5、7、11 秒历史；神经网络可用 `--device cuda`。输出保存在 `outputs/`。
 
 ## 许可
 
-代码采用 [MIT](LICENSE)，CATS-CF 数据采用 [CC BY 4.0](LICENSE-DATA)。OpenACC © European Union，CC BY 4.0（[AstaZero](data/external/openacc/AstaZero_copyright.txt)、[Casale](data/external/openacc/Casale_copyright.txt)）。
+代码采用 [MIT](LICENSE)，CATS-CF 数据采用 [CC BY 4.0](LICENSE-DATA)。OpenACC © European Union，CC BY 4.0（[AstaZero](data/OpenACC/AstaZero_copyright.txt)、[Casale](data/OpenACC/Casale_copyright.txt)）。

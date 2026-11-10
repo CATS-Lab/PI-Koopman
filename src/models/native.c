@@ -1,6 +1,5 @@
 #include <math.h>
-/* Same continuous-time CTH/IDM laws as the Python reference; fixed maximum
-   RK4 step makes observation-rate comparisons independent of solver step. */
+/* Author: Hangyu Li. RK4 integration with a bounded internal step. */
 static double accel(int law, const double *p, double s, double v, double u){
     if(law>=2){
         int dict=law-2,n=4;double d=u-v,F[27]={1,s,v,d};
