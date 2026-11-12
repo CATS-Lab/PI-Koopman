@@ -4,3 +4,4 @@ pandas==2.2.3
 torch==2.14.0
 scikit-learn==1.9.1
 threadpoolctl==3.7.0
+matplotlib==3.11.2

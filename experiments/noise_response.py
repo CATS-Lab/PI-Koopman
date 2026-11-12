@@ -106,6 +106,26 @@ def evaluate(task):
     return rows
 
 
+def select_simulated(records, pool):
+    pool_records = [r for r in records if r[1] != "recorded"]
+    scores = pd.DataFrame(
+        [
+            row
+            for block in pool.imap_unordered(
+                source_scores, pool_records, chunksize=4
+            )
+            for row in block
+        ],
+        columns=["object", "model", "config", "score"],
+    )
+    choices = {}
+    for obj in scores.object.unique():
+        by = scores[scores.object != obj].groupby(["model", "config"]).score.mean()
+        for model in PI:
+            choices[obj, model] = json.loads(by.loc[model].idxmin())
+    return choices
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -118,6 +138,7 @@ def main():
         ],
     )
     parser.add_argument("--output", type=Path, default=(OUTPUTS / "noise"))
+    parser.add_argument("--simulation-profiles", type=Path, help="Previously selected simulation configurations")
     parser.add_argument("--workers", type=int, default=4)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -134,22 +155,14 @@ def main():
         replays.records("openacc", openacc()[0])
     )
     with mp.Pool(args.workers) as pool:
-        pool_records = [r for r in records if r[1] != "recorded"]
-        scores = pd.DataFrame(
-            [
-                row
-                for block in pool.imap_unordered(
-                    source_scores, pool_records, chunksize=4
-                )
-                for row in block
-            ],
-            columns=["object", "model", "config", "score"],
-        )
-        choices = {}
-        for obj in scores.object.unique():
-            by = scores[scores.object != obj].groupby(["model", "config"]).score.mean()
-            for model in PI:
-                choices[obj, model] = json.loads(by.loc[model].idxmin())
+        if args.simulation_profiles is None:
+            choices = select_simulated(records, pool)
+        else:
+            profiles_used = pd.read_csv(args.simulation_profiles)
+            choices = {
+                (r.object, r.model): dict(T=r.T, kappa=r.kappa, ridge=r.ridge)
+                for r in profiles_used.itertuples()
+            }
         pd.DataFrame(
             [
                 dict(object=obj, model=model, **cfg)

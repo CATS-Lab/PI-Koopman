@@ -6,6 +6,7 @@ import json
 import traceback
 import argparse
 import numpy as np
+from scipy.integrate import trapezoid
 import pandas as pd
 
 import src.evaluation.recognition as helpers
@@ -51,7 +52,7 @@ def ordinary_residuals(t, z, model):
         duration = t[end] - t[j]
         if not np.isclose(duration, 1.0, atol=1e-8):
             raise ValueError("Expected exactly 1 s support")
-        integral = np.trapezoid(field[j : end + 1], t[j : end + 1])
+        integral = trapezoid(field[j : end + 1], t[j : end + 1])
         residual = (z[end, 1] - z[j, 1] - integral) / duration
         if not np.isfinite(residual):
             raise ValueError("Nonfinite residual; no encounter may be dropped")

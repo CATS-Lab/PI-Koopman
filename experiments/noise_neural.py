@@ -463,10 +463,14 @@ if __name__ == "__main__":
     )
     ap.add_argument("--prepare", action="store_true")
     ap.add_argument("--device", default="cpu")
-    ap.add_argument("--batch", type=int, default=256)
-    ap.add_argument("--response-batch", type=int, default=12)
+    ap.add_argument("--batch", type=int)
+    ap.add_argument("--response-batch", type=int)
     ap.add_argument("--family", nargs="+", choices=["DNN", "LSTM", DEEP])
     args = ap.parse_args()
+    if args.batch is None:
+        args.batch = 624 if args.device.startswith("cuda") else 256
+    if args.response_batch is None:
+        args.response_batch = 60 if args.device.startswith("cuda") else 12
     torch.set_num_threads(1)
     torch.backends.cuda.matmul.allow_tf32 = False
     if args.prepare:

@@ -4,6 +4,7 @@ from src.paths import OUTPUTS
 
 import time
 import numpy as np
+from scipy.integrate import trapezoid
 import pandas as pd
 from scipy.optimize import least_squares
 
@@ -162,8 +163,8 @@ def weak_rows(t, F, v, method, T=1.0, kappa=1.0):
             w = 16 * q * q * (1 - q) ** 2
         if method in ["expweak", "finiteexp"]:
             w = w * np.exp(-kappa * q)
-        w = w / np.trapezoid(w, tt)
-        A.append(np.trapezoid(w[:, None] * F[j : j + n], tt, axis=0))
+        w = w / trapezoid(w, tt)
+        A.append(trapezoid(w[:, None] * F[j : j + n], tt, axis=0))
         y.append(np.sum((w[1:] + w[:-1]) / 2 * np.diff(v[j : j + n])))
     return np.asarray(A), np.asarray(y)
 

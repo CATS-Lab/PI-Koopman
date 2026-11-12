@@ -39,27 +39,155 @@ CATS-CF 将贡献到 [OpenPAV](https://openpav.github.io/OpenPAV/) 这一综合�
 
 ## 复现实验
 
+### 环境与数据准备
+
+在仓库根目录使用 Python 3.12 和 C99 编译器。支持 Linux、macOS 和 Windows 上的 WSL。安装依赖、编译积分程序并检查两套数据。
+
 ```sh
 python -m pip install -e .
 python -m scripts.build_native
 python -m scripts.verify_data
 python -m scripts.download_openacc
-python -m experiments.run_main --axis duration --dataset both
-python -m experiments.summarize_prediction --axis duration --dataset local
-python -m experiments.summarize_prediction --axis duration --dataset openacc
-python -m experiments.run_main --axis rate --dataset local
-python -m experiments.summarize_prediction --axis rate --dataset local
-python -m experiments.recognition
-python -m experiments.noise_response --workers 4
-python -m experiments.noise_neural --prepare --input outputs/noise/observations
-python -m experiments.noise_neural --input outputs/noise/observations --device cpu
-python -m experiments.summarize_noise
-python -m experiments.timing local 7 --device cpu
+python -m scripts.prepare_openacc
 ```
 
-DNN、LSTM 各自固定结构和训练流程。采样率实验沿用 7 秒参考条件的组外参数。先为两个数据集各生成历史长度实验汇总，再运行噪声实验和计时。单个物理预测条件可用 `python -m experiments.run_prediction --dataset local --budget 7 --rate 10 --origin 20`；主实验网格位于 `configs/config.json`。计时命令可分别指定两个数据集和 5、7、11 秒历史；神经网络可用 `--device cuda`。输出保存在 `outputs/`。
+检查应读到 42 张 CATS-CF 表和 284 段 OpenACC 轨迹。下列命令默认使用 CPU。预测、噪声或计时实验可在 CUDA 机器上加 `--device cuda`。运行结果写入 `outputs/`。 表中列出参考结果的舍入值，神经网络拟合和非线性优化在不同设备和数值库上会有小幅差异。
 
-10 Hz 噪声实验对独立噪声和时间相关噪声各使用三个配对随机种子。车距误差标准差为 0.2 m，两车速度误差标准差各为 0.1 m；分别将两车速度限制为非负，再计算相对速度。全部 3,380 条实车和配套仿真记录参与比较。
+### 1. 不同历史长度下的预测
+
+以 10 Hz 观测 5、7 或 11 秒，从第 20 秒起预测未来 5 秒。本实验也生成噪声与计时实验使用的组外配置。
+
+```sh
+python -m scripts.reproduce duration
+```
+
+每格为 ACC 跟驰样本的平均速度 RMSE（m/s）/ 车距 RMSE（m）。
+
+**CATS-CF** · `outputs/summaries/local_duration.csv`
+
+| 模型 | 5 s | 7 s | 11 s |
+| --- | --- | --- | --- |
+| CTH | 0.428 / 0.771 | 0.445 / 0.913 | 0.493 / 1.019 |
+| IDM | 0.518 / 0.920 | 0.500 / 0.964 | 0.373 / 0.835 |
+| DNN | 0.488 / 0.772 | 0.548 / 0.962 | 0.501 / 0.819 |
+| LSTM | 0.501 / 0.797 | 0.497 / 0.784 | 0.483 / 0.736 |
+| Deep Koopman | 0.589 / 0.865 | 0.561 / 0.872 | 0.567 / 0.859 |
+| PI-Koopman-CTH | 0.420 / 0.743 | 0.423 / 0.868 | 0.479 / 0.989 |
+| PI-Koopman-IDM | 0.541 / 0.913 | 0.465 / 0.892 | 0.337 / 0.676 |
+
+**OpenACC** · `outputs/summaries/openacc_duration.csv`
+
+| 模型 | 5 s | 7 s | 11 s |
+| --- | --- | --- | --- |
+| CTH | 0.331 / 0.626 | 0.333 / 0.653 | 0.370 / 0.766 |
+| IDM | 0.347 / 0.658 | 0.351 / 0.661 | 0.377 / 0.765 |
+| DNN | 0.435 / 0.706 | 0.415 / 0.688 | 0.387 / 0.672 |
+| LSTM | 0.418 / 0.680 | 0.400 / 0.659 | 0.399 / 0.658 |
+| Deep Koopman | 0.840 / 1.226 | 0.646 / 1.041 | 0.635 / 0.985 |
+| PI-Koopman-CTH | 0.334 / 0.621 | 0.327 / 0.634 | 0.362 / 0.741 |
+| PI-Koopman-IDM | 0.373 / 0.679 | 0.402 / 0.772 | 0.378 / 0.733 |
+
+### 2. 不同观测频率下的预测
+
+使用 CATS-CF 的 7 秒历史，平均第 15、20、24 秒三个起点的预测结果。各起点和频率共用 7 秒、10 Hz 参考条件选出的配置。
+
+```sh
+python -m scripts.reproduce rate
+```
+
+每格为 ACC 跟驰样本的平均速度 RMSE（m/s）/ 车距 RMSE（m）。
+
+**CATS-CF** · `outputs/summaries/local_rate.csv`
+
+| 模型 | 1 Hz | 5 Hz | 10 Hz | 25 Hz | 125 Hz |
+| --- | --- | --- | --- | --- | --- |
+| CTH | 0.347 / 0.681 | 0.365 / 0.721 | 0.369 / 0.729 | 0.373 / 0.739 | 0.375 / 0.743 |
+| IDM | 0.433 / 0.853 | 0.445 / 0.891 | 0.448 / 0.898 | 0.466 / 0.932 | 0.468 / 0.937 |
+| DNN | 0.442 / 0.789 | 0.464 / 0.830 | 0.466 / 0.833 | 0.475 / 0.848 | 0.475 / 0.850 |
+| LSTM | 0.463 / 0.779 | 0.423 / 0.717 | 0.416 / 0.705 | 0.431 / 0.725 | 0.444 / 0.759 |
+| Deep Koopman | 0.518 / 0.847 | 0.535 / 0.853 | 0.535 / 0.854 | 0.541 / 0.869 | 0.559 / 0.890 |
+| PI-Koopman-CTH | 0.342 / 0.674 | 0.352 / 0.694 | 0.356 / 0.701 | 0.357 / 0.700 | 0.359 / 0.706 |
+| PI-Koopman-IDM | 0.421 / 0.828 | 0.416 / 0.825 | 0.416 / 0.825 | 0.433 / 0.861 | 0.431 / 0.855 |
+
+### 3. ACC 与人工驾驶辨识
+
+拟合每条 CATS-CF 轨迹的前 15 秒，以速度积分残差的方差打分，在其他轮次上选择分类阈值。
+
+```sh
+python -m scripts.reproduce recognition
+```
+
+`outputs/recognition/summary.csv`
+
+| Hz | 模型 | ACC 判对 | 人工判对 | 平衡准确率 | AUC |
+| --- | --- | --- | --- | --- | --- |
+| 10 | CTH-OE | 20/24 | 18/18 | 0.917 | 0.938 |
+| 10 | IDM-OE | 15/24 | 14/18 | 0.701 | 0.824 |
+| 10 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
+| 10 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
+| 25 | CTH-OE | 20/24 | 18/18 | 0.917 | 0.938 |
+| 25 | IDM-OE | 15/24 | 14/18 | 0.701 | 0.819 |
+| 25 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
+| 25 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
+
+### 4. 观测噪声下的加速度响应
+
+先完成实验 1，生成预测选参结果。全部方法使用相同的 7 秒历史、10 Hz 观测、三个起点和三个噪声种子。车距噪声标准差为 0.2 m，两车速度噪声标准差各为 0.1 m。加噪后将两车速度分别限制为非负，再计算相对速度。
+
+```sh
+python -m scripts.reproduce noise
+```
+
+**七种模型的比较。** 260 条实车记录评价加噪拟合相对干净拟合的加速度响应均方根变化，3,120 条配套仿真评价相对真值的加速度 RMSE。每格依次给出独立噪声 / 时间相关噪声的结果（m/s²）。
+
+`outputs/noise/summary.csv` · `outputs/noise/claim_rate_consistency.pdf`
+
+复现命令从 `configs/simulation_pi.csv` 读取论文经组外选择的 24 组仿真 PI 配置（两种物理先验 × 十二个虚拟后车）。如需在自己的机器上重新做离线选参，可在实验 1 后运行 `python -m experiments.noise_response`。不同数值环境可能选出不同的拟合窗，进而改变误差。
+
+| 模型 | CATS-CF 实车 | OpenACC 实车 | CATS-CF 仿真 | OpenACC 仿真 |
+| --- | --- | --- | --- | --- |
+| CTH | 0.0405 / 0.0640 | 0.0562 / 0.0707 | 0.0774 / 0.1079 | 0.0852 / 0.1029 |
+| IDM | 0.0375 / 0.0551 | 0.0529 / 0.0657 | 0.0487 / 0.0747 | 0.0613 / 0.0765 |
+| DNN | 0.1309 / 0.1223 | 0.2118 / 0.1860 | 0.2169 / 0.2070 | 0.2155 / 0.1886 |
+| LSTM | 0.2039 / 0.2192 | 0.3527 / 0.3233 | 0.4011 / 0.3652 | 0.3823 / 0.3428 |
+| Deep Koopman | 0.1671 / 0.1666 | 0.1580 / 0.1555 | 0.2992 / 0.2968 | 0.2849 / 0.2833 |
+| PI-Koopman-CTH | 0.0384 / 0.0586 | 0.0516 / 0.0656 | 0.0719 / 0.0996 | 0.0782 / 0.0941 |
+| PI-Koopman-IDM | 0.0348 / 0.0517 | 0.0494 / 0.0624 | 0.0464 / 0.0724 | 0.0569 / 0.0720 |
+
+**三种估计方法。** FD 为有限差分，Integral 为积分形式，Exp. weak（ours）为本文采用的指数加权弱形式。下表给出配套仿真的真值 RMSE（m/s²），每格为独立噪声 / 时间相关噪声。图中以普通弱形式为零线，负值表示误差较低。
+
+`outputs/noise/summary.csv` · `outputs/noise/synthetic_field_error.pdf`
+
+| 物理先验 | 估计方法 | CATS-CF | OpenACC |
+| --- | --- | --- | --- |
+| CTH | FD | 0.07241 / 0.09803 | 0.07881 / 0.09296 |
+| CTH | Integral | 0.07542 / 0.10089 | 0.08093 / 0.09494 |
+| CTH | **Exp. weak (ours)** | 0.07190 / 0.09958 | 0.07818 / 0.09415 |
+| IDM | FD | 0.04856 / 0.06936 | 0.05895 / 0.06949 |
+| IDM | Integral | 0.04957 / 0.07238 | 0.05994 / 0.07243 |
+| IDM | **Exp. weak (ours)** | 0.04644 / 0.07235 | 0.05686 / 0.07204 |
+
+### 计算效率
+
+先完成实验 1。CPU 命令测量全部七种模型；可选的 CUDA 命令测量三种神经模型。在每套数据的六条轨迹上，分别使用三种历史长度，测量单次拟合和一次 5 秒预测。请在待测设备上执行相应命令。
+
+```sh
+python -m scripts.reproduce timing
+# NVIDIA GPU
+python -m scripts.reproduce timing --device cuda
+```
+
+下表是平均毫秒数，格式为拟合（+ 预测）。CPU 和 GPU 命令分别写出 `outputs/timing.csv` 和 `outputs/timing_cuda.csv`。具体耗时随硬件和软件环境变化。
+
+| 模型 | M4 Pro | Threadripper | RTX 6000 Ada |
+| --- | --- | --- | --- |
+| CTH | 14.42 (+0.02) | 16.21 (+0.02) | — |
+| DNN | 4101.87 (+4.98) | 5410.59 (+8.20) | 2231.99 (+8.82) |
+| Deep Koopman | 259.48 (+9.12) | 350.97 (+12.49) | 246.91 (+12.89) |
+| IDM | 21.80 (+0.03) | 22.70 (+0.03) | — |
+| LSTM | 8635.98 (+5.66) | 10809.42 (+9.17) | 4163.01 (+10.00) |
+| PI-Koopman-CTH | 15.47 (+0.07) | 17.20 (+0.08) | — |
+| PI-Koopman-IDM | 23.06 (+0.08) | 23.71 (+0.10) | — |
 
 ## 许可
 
