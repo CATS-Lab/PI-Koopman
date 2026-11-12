@@ -27,7 +27,7 @@ CATS-CF dataset & PI-Koopman research code for **[Physics-Informed Koopman Learn
 
 Hangyu Li maintains the experiment code. The 42 tables in `data/CATS-CF/` contain 30 seconds of synchronized observations at 125 Hz. All experiment times are relative to each table. OpenACC uses 284 eligible 30-second observations from AstaZero and Casale. Use `local` for CATS-CF and `openacc` for OpenACC.
 
-Rebuild the released tables from the paired raw vehicle logs with `python -m scripts.rebuild_data --input RAW --output DEST`. The external trajectories are from the [European Commission JRC OpenACC dataset](https://doi.org/10.2905/JRC.KMH3D00).
+Rebuild the released tables from the paired raw vehicle logs with `python -m scripts.rebuild_data --input RAW`. The external trajectories are from the [European Commission JRC OpenACC dataset](https://doi.org/10.2905/JRC.KMH3D00).
 
 ### OpenPAV
 
@@ -51,11 +51,11 @@ python -m scripts.download_openacc
 python -m scripts.prepare_openacc
 ```
 
-The checks should report 42 CATS-CF tables and 284 OpenACC encounters. Commands below default to CPU. On a CUDA machine, append `--device cuda` to a prediction, noise or timing command. Generated files go to `outputs/`. Reference values are rounded. Neural fits and nonlinear optimizers can vary slightly across devices and numerical libraries.
+Commands default to CPU. To use CUDA for prediction, noise or timing, add `--device cuda`.
 
 ### 1. Prediction by history length
 
-Fit each model with 5, 7 or 11 s of history at 10 Hz and forecast the next 5 s from t = 20 s. This run also writes the held-out group settings used by the noise and timing experiments.
+Fit each model with 5, 7 or 11 s of history at 10 Hz and forecast the next 5 s from t = 20 s.
 
 ```sh
 python -m scripts.reproduce duration
@@ -63,7 +63,7 @@ python -m scripts.reproduce duration
 
 Each cell gives speed RMSE (m/s) / gap RMSE (m), averaged over ACC encounters.
 
-**CATS-CF** · `outputs/summaries/local_duration.csv`
+**CATS-CF**
 
 | Model | 5 s | 7 s | 11 s |
 | --- | --- | --- | --- |
@@ -75,7 +75,7 @@ Each cell gives speed RMSE (m/s) / gap RMSE (m), averaged over ACC encounters.
 | PI-Koopman-CTH | 0.420 / 0.743 | 0.423 / 0.868 | 0.479 / 0.989 |
 | PI-Koopman-IDM | 0.541 / 0.913 | 0.465 / 0.892 | 0.337 / 0.676 |
 
-**OpenACC** · `outputs/summaries/openacc_duration.csv`
+**OpenACC**
 
 | Model | 5 s | 7 s | 11 s |
 | --- | --- | --- | --- |
@@ -97,7 +97,7 @@ python -m scripts.reproduce rate
 
 Each cell gives speed RMSE (m/s) / gap RMSE (m), averaged over ACC encounters.
 
-**CATS-CF** · `outputs/summaries/local_rate.csv`
+**CATS-CF**
 
 | Model | 1 Hz | 5 Hz | 10 Hz | 25 Hz | 125 Hz |
 | --- | --- | --- | --- | --- | --- |
@@ -117,8 +117,6 @@ Fit the first 15 s of each CATS-CF encounter and score the variance of the veloc
 python -m scripts.reproduce recognition
 ```
 
-`outputs/recognition/summary.csv`
-
 | Hz | Model | ACC correct | Human correct | Balanced accuracy | AUC |
 | --- | --- | --- | --- | --- | --- |
 | 10 | CTH-OE | 20/24 | 18/18 | 0.917 | 0.938 |
@@ -132,17 +130,13 @@ python -m scripts.reproduce recognition
 
 ### 4. Response under observation noise
 
-Run experiment 1 first for its prediction settings. All methods use the same 7 s histories at 10 Hz, three origins and three noise seeds. Gap noise has SD 0.2 m and each vehicle’s speed noise has SD 0.1 m. Absolute speeds are bounded below by zero before computing relative speed.
+Run experiment 1 first. The simulations use the paper’s group-selected PI settings for each follower and physical prior. All methods use the same 7 s histories at 10 Hz, three origins and three noise seeds. Gap noise has SD 0.2 m and each vehicle’s speed noise has SD 0.1 m. Absolute speeds are bounded below by zero before computing relative speed.
 
 ```sh
 python -m scripts.reproduce noise
 ```
 
 **Seven-model comparison.** For the 260 recorded encounters, the metric is the RMS change from the clean-fit acceleration response. For 3,120 matched simulations, it is acceleration RMSE against truth. Each cell gives independent / time-correlated noise (m/s²).
-
-`outputs/noise/summary.csv` · `outputs/noise/claim_rate_consistency.pdf`
-
-The reproduction command applies the paper’s 24 held-out simulation PI configurations from `configs/simulation_pi.csv` (two physical priors × twelve followers). To repeat their offline selection on your machine, run `python -m experiments.noise_response` after experiment 1. Selection can change the fitted window and the resulting errors across numerical environments.
 
 | Model | CATS-CF recorded | OpenACC recorded | CATS-CF simulated | OpenACC simulated |
 | --- | --- | --- | --- | --- |
@@ -156,8 +150,6 @@ The reproduction command applies the paper’s 24 held-out simulation PI configu
 
 **Estimator comparison.** FD uses finite differences, Integral uses the integral equation and Exp. weak (ours) uses exponentially weighted weak regression. The table gives simulated truth RMSE (m/s²), independent / time-correlated. The figure subtracts the ordinary weak result from each value. A negative difference indicates lower error.
 
-`outputs/noise/summary.csv` · `outputs/noise/synthetic_field_error.pdf`
-
 | Prior | Estimator | CATS-CF | OpenACC |
 | --- | --- | --- | --- |
 | CTH | FD | 0.07241 / 0.09803 | 0.07881 / 0.09296 |
@@ -169,7 +161,7 @@ The reproduction command applies the paper’s 24 held-out simulation PI configu
 
 ### Computational efficiency
 
-Run experiment 1 first. The CPU command times all seven models, and the optional CUDA command times the three neural models. Time one fit and one 5 s forecast per target on six encounters per dataset at each of the three history lengths. Run on each device whose timing you want to measure.
+Run experiment 1 first. The CPU command times all seven models, and the optional CUDA command times the three neural models. Time one fit and one 5 s forecast per target on six encounters per dataset at each of the three history lengths.
 
 ```sh
 python -m scripts.reproduce timing
@@ -177,7 +169,7 @@ python -m scripts.reproduce timing
 python -m scripts.reproduce timing --device cuda
 ```
 
-Means in ms, reported as fit (+ forecast). The CPU and GPU commands write `outputs/timing.csv` and `outputs/timing_cuda.csv` respectively. Times depend on hardware and software.
+Mean fitting time (+ forecast time), in milliseconds.
 
 | Model | M4 Pro | Threadripper | RTX 6000 Ada |
 | --- | --- | --- | --- |

@@ -27,7 +27,7 @@ CATS-CF 跟驰数据集与 PI-Koopman 实验代码，配套论文为 **[Physics-
 
 实验代码作者为 Hangyu Li。`data/CATS-CF/` 中的 42 张公开表各含 30 秒、125 Hz 的双车同步观测；实验片段均相对于各表的起点。OpenACC 从 AstaZero 和 Casale 选取 284 段 30 秒记录。命令中的 `local` 代表 CATS-CF，`openacc` 代表 OpenACC。
 
-原始双车日志可用 `python -m scripts.rebuild_data --input RAW --output DEST` 重建公开表。OpenACC 来源为[欧盟 JRC](https://doi.org/10.2905/JRC.KMH3D00)。
+原始双车日志可用 `python -m scripts.rebuild_data --input RAW` 重建公开表。OpenACC 来源为[欧盟 JRC](https://doi.org/10.2905/JRC.KMH3D00)。
 
 ### OpenPAV
 
@@ -51,11 +51,11 @@ python -m scripts.download_openacc
 python -m scripts.prepare_openacc
 ```
 
-检查应读到 42 张 CATS-CF 表和 284 段 OpenACC 轨迹。下列命令默认使用 CPU。预测、噪声或计时实验可在 CUDA 机器上加 `--device cuda`。运行结果写入 `outputs/`。 表中列出参考结果的舍入值，神经网络拟合和非线性优化在不同设备和数值库上会有小幅差异。
+默认使用 CPU。预测、噪声和计时实验支持 `--device cuda`。
 
 ### 1. 不同历史长度下的预测
 
-以 10 Hz 观测 5、7 或 11 秒，从第 20 秒起预测未来 5 秒。本实验也生成噪声与计时实验使用的组外配置。
+以 10 Hz 观测 5、7 或 11 秒，从第 20 秒起预测未来 5 秒。
 
 ```sh
 python -m scripts.reproduce duration
@@ -63,7 +63,7 @@ python -m scripts.reproduce duration
 
 每格为 ACC 跟驰样本的平均速度 RMSE（m/s）/ 车距 RMSE（m）。
 
-**CATS-CF** · `outputs/summaries/local_duration.csv`
+**CATS-CF**
 
 | 模型 | 5 s | 7 s | 11 s |
 | --- | --- | --- | --- |
@@ -75,7 +75,7 @@ python -m scripts.reproduce duration
 | PI-Koopman-CTH | 0.420 / 0.743 | 0.423 / 0.868 | 0.479 / 0.989 |
 | PI-Koopman-IDM | 0.541 / 0.913 | 0.465 / 0.892 | 0.337 / 0.676 |
 
-**OpenACC** · `outputs/summaries/openacc_duration.csv`
+**OpenACC**
 
 | 模型 | 5 s | 7 s | 11 s |
 | --- | --- | --- | --- |
@@ -97,7 +97,7 @@ python -m scripts.reproduce rate
 
 每格为 ACC 跟驰样本的平均速度 RMSE（m/s）/ 车距 RMSE（m）。
 
-**CATS-CF** · `outputs/summaries/local_rate.csv`
+**CATS-CF**
 
 | 模型 | 1 Hz | 5 Hz | 10 Hz | 25 Hz | 125 Hz |
 | --- | --- | --- | --- | --- | --- |
@@ -117,8 +117,6 @@ python -m scripts.reproduce rate
 python -m scripts.reproduce recognition
 ```
 
-`outputs/recognition/summary.csv`
-
 | Hz | 模型 | ACC 判对 | 人工判对 | 平衡准确率 | AUC |
 | --- | --- | --- | --- | --- | --- |
 | 10 | CTH-OE | 20/24 | 18/18 | 0.917 | 0.938 |
@@ -132,17 +130,13 @@ python -m scripts.reproduce recognition
 
 ### 4. 观测噪声下的加速度响应
 
-先完成实验 1，生成预测选参结果。全部方法使用相同的 7 秒历史、10 Hz 观测、三个起点和三个噪声种子。车距噪声标准差为 0.2 m，两车速度噪声标准差各为 0.1 m。加噪后将两车速度分别限制为非负，再计算相对速度。
+先完成实验 1。仿真采用论文中按后车对象和物理先验分别选定的组外参数。全部方法使用相同的 7 秒历史、10 Hz 观测、三个起点和三个噪声种子。车距噪声标准差为 0.2 m，两车速度噪声标准差各为 0.1 m。加噪后将两车速度分别限制为非负，再计算相对速度。
 
 ```sh
 python -m scripts.reproduce noise
 ```
 
 **七种模型的比较。** 260 条实车记录评价加噪拟合相对干净拟合的加速度响应均方根变化，3,120 条配套仿真评价相对真值的加速度 RMSE。每格依次给出独立噪声 / 时间相关噪声的结果（m/s²）。
-
-`outputs/noise/summary.csv` · `outputs/noise/claim_rate_consistency.pdf`
-
-复现命令从 `configs/simulation_pi.csv` 读取论文经组外选择的 24 组仿真 PI 配置（两种物理先验 × 十二个虚拟后车）。如需在自己的机器上重新做离线选参，可在实验 1 后运行 `python -m experiments.noise_response`。不同数值环境可能选出不同的拟合窗，进而改变误差。
 
 | 模型 | CATS-CF 实车 | OpenACC 实车 | CATS-CF 仿真 | OpenACC 仿真 |
 | --- | --- | --- | --- | --- |
@@ -156,8 +150,6 @@ python -m scripts.reproduce noise
 
 **三种估计方法。** FD 为有限差分，Integral 为积分形式，Exp. weak（ours）为本文采用的指数加权弱形式。下表给出配套仿真的真值 RMSE（m/s²），每格为独立噪声 / 时间相关噪声。图中以普通弱形式为零线，负值表示误差较低。
 
-`outputs/noise/summary.csv` · `outputs/noise/synthetic_field_error.pdf`
-
 | 物理先验 | 估计方法 | CATS-CF | OpenACC |
 | --- | --- | --- | --- |
 | CTH | FD | 0.07241 / 0.09803 | 0.07881 / 0.09296 |
@@ -169,7 +161,7 @@ python -m scripts.reproduce noise
 
 ### 计算效率
 
-先完成实验 1。CPU 命令测量全部七种模型；可选的 CUDA 命令测量三种神经模型。在每套数据的六条轨迹上，分别使用三种历史长度，测量单次拟合和一次 5 秒预测。请在待测设备上执行相应命令。
+先完成实验 1。CPU 命令测量全部七种模型；可选的 CUDA 命令测量三种神经模型。在每套数据的六条轨迹上，分别使用三种历史长度，测量单次拟合和一次 5 秒预测。
 
 ```sh
 python -m scripts.reproduce timing
@@ -177,7 +169,7 @@ python -m scripts.reproduce timing
 python -m scripts.reproduce timing --device cuda
 ```
 
-下表是平均毫秒数，格式为拟合（+ 预测）。CPU 和 GPU 命令分别写出 `outputs/timing.csv` 和 `outputs/timing_cuda.csv`。具体耗时随硬件和软件环境变化。
+表中为平均拟合时间（+ 预测时间），单位为毫秒。
 
 | 模型 | M4 Pro | Threadripper | RTX 6000 Ada |
 | --- | --- | --- | --- |
