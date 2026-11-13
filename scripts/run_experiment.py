@@ -21,7 +21,7 @@ def main():
         kinds = ["pi", "neural"] if args.experiment == "noise" else ["pi"]
         if any(not (profiles / f"{ds}_{kind}_settings.csv").is_file()
                for ds in ["local", "openacc"] for kind in kinds):
-            parser.error("First run: python -m scripts.reproduce duration")
+            parser.error("First run: python -m scripts.run_experiment duration")
     if args.experiment in ("duration", "rate"):
         datasets = ["local", "openacc"] if args.experiment == "duration" else ["local"]
         run("experiments.run_main", "--axis", args.experiment, "--dataset",
