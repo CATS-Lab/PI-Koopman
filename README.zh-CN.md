@@ -167,7 +167,7 @@ python -m scripts.run_experiment timing --device cuda
 
 表中为平均拟合时间（+ 预测时间），单位为毫秒。
 
-| 模型 | M4 Pro | Threadripper | RTX 6000 Ada |
+| 模型 | <img src="assets/apple.svg" width="16" height="16" alt=""> Apple M4 Pro | <img src="assets/amd.svg" width="16" height="16" alt=""> AMD Ryzen Threadripper PRO 7985WX | <img src="assets/nvidia.svg" width="16" height="16" alt=""> NVIDIA RTX 6000 Ada |
 | --- | --- | --- | --- |
 | CTH | **14.42** (+**0.02**) | **16.21** (+**0.02**) | — |
 | DNN | 4101.87 (+4.98) | 5410.59 (+8.20) | 2231.99 (+**8.82**) |
