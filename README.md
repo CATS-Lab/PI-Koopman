@@ -140,7 +140,22 @@ python -m scripts.run_experiment noise
 | IDM | Integral | 0.04957 / 0.07238 | 0.05994 / 0.07243 |
 | IDM | **Exp. weak (ours)** | **0.04644** / 0.07235 | **0.05686** / 0.07204 |
 
-### Computational efficiency
+### 4. Downstream example: ACC and human-driver recognition
+
+Fit the first 15 s of each CATS-CF encounter and score the variance of the velocity-integral residual. The classification threshold is selected on the other runs.
+
+```sh
+python -m scripts.run_experiment recognition
+```
+
+| Hz | Model | ACC correct | Human correct | Balanced accuracy | AUC |
+| --- | --- | --- | --- | --- | --- |
+| 10 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
+| 10 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
+| 25 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
+| 25 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
+
+## Computational efficiency
 
 Run experiment 1 first. The CPU command times all seven models, and the optional CUDA command times the three neural models. Time one fit and one 5 s forecast per target on six encounters per dataset at each of the three history lengths.
 
@@ -161,21 +176,6 @@ Mean fitting time (+ forecast time), in milliseconds.
 | LSTM | 8635.98 (+5.66) | 10809.42 (+9.17) | 4163.01 (+10.00) |
 | **PI-Koopman-CTH (ours)** | 15.47 (+0.07) | 17.20 (+0.08) | — |
 | **PI-Koopman-IDM (ours)** | 23.06 (+0.08) | 23.71 (+0.10) | — |
-
-### 4. Downstream example: ACC and human-driver recognition
-
-Fit the first 15 s of each CATS-CF encounter and score the variance of the velocity-integral residual. The classification threshold is selected on the other runs.
-
-```sh
-python -m scripts.run_experiment recognition
-```
-
-| Hz | Model | ACC correct | Human correct | Balanced accuracy | AUC |
-| --- | --- | --- | --- | --- | --- |
-| 10 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
-| 10 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
-| 25 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
-| 25 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
 
 ## License
 
