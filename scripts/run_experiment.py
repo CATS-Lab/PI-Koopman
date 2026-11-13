@@ -32,11 +32,10 @@ def main():
         run("experiments.recognition")
     elif args.experiment == "noise":
         observations = str(OUTPUTS / "noise/observations")
-        run("experiments.noise_response", "--simulation-profiles", str(ROOT / "configs/simulation_pi.csv"))
+        run("experiments.noise_response")
         run("experiments.noise_neural", "--prepare", "--input", observations)
         run("experiments.noise_neural", "--input", observations, "--device", args.device)
         run("experiments.summarize_noise")
-        run("experiments.plot_noise")
     else:
         for dataset in ["local", "openacc"]:
             for budget in ["5", "7", "11"]:

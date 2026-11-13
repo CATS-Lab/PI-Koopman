@@ -130,7 +130,7 @@ python -m scripts.run_experiment recognition
 
 ### 4. Response under observation noise
 
-Run experiment 1 first. The simulations use the paper’s group-selected PI settings for each follower and physical prior. All methods use the same 7 s histories at 10 Hz, three origins and three noise seeds. Gap noise has SD 0.2 m and each vehicle’s speed noise has SD 0.1 m. Absolute speeds are bounded below by zero before computing relative speed.
+Run experiment 1 first. For each simulated follower and physical prior, the algorithm selects the configuration with the lowest mean prediction score on the other eleven followers. All methods use the same 7 s histories at 10 Hz, three origins and three noise seeds. Gap noise has SD 0.2 m and each vehicle’s speed noise has SD 0.1 m. Absolute speeds are bounded below by zero before computing relative speed.
 
 ```sh
 python -m scripts.run_experiment noise

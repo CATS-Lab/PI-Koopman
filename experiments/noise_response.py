@@ -138,7 +138,6 @@ def main():
         ],
     )
     parser.add_argument("--output", type=Path, default=(OUTPUTS / "noise"))
-    parser.add_argument("--simulation-profiles", type=Path, help="Previously selected simulation configurations")
     parser.add_argument("--workers", type=int, default=4)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -155,14 +154,7 @@ def main():
         replays.records("openacc", openacc()[0])
     )
     with mp.Pool(args.workers) as pool:
-        if args.simulation_profiles is None:
-            choices = select_simulated(records, pool)
-        else:
-            profiles_used = pd.read_csv(args.simulation_profiles)
-            choices = {
-                (r.object, r.model): dict(T=r.T, kappa=r.kappa, ridge=r.ridge)
-                for r in profiles_used.itertuples()
-            }
+        choices = select_simulated(records, pool)
         pd.DataFrame(
             [
                 dict(object=obj, model=model, **cfg)
