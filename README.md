@@ -109,26 +109,7 @@ Each cell gives speed RMSE (m/s) / gap RMSE (m), averaged over ACC encounters.
 | **PI-Koopman-CTH (ours)** | **0.342** / **0.674** | **0.352** / **0.694** | **0.356** / **0.701** | **0.357** / **0.700** | **0.359** / **0.706** |
 | **PI-Koopman-IDM (ours)** | 0.421 / 0.828 | 0.416 / 0.825 | 0.416 / 0.825 | 0.433 / 0.861 | 0.431 / 0.855 |
 
-### 3. ACC and human-driver recognition
-
-Fit the first 15 s of each CATS-CF encounter and score the variance of the velocity-integral residual. The classification threshold is selected on the other runs.
-
-```sh
-python -m scripts.run_experiment recognition
-```
-
-| Hz | Model | ACC correct | Human correct | Balanced accuracy | AUC |
-| --- | --- | --- | --- | --- | --- |
-| 10 | CTH-OE | **20/24** | **18/18** | **0.917** | 0.938 |
-| 10 | IDM-OE | 15/24 | 14/18 | 0.701 | 0.824 |
-| 10 | **PI-Koopman-CTH (ours)** | 19/24 | 17/18 | 0.868 | **0.940** |
-| 10 | **PI-Koopman-IDM (ours)** | 16/24 | 16/18 | 0.778 | 0.847 |
-| 25 | CTH-OE | **20/24** | **18/18** | **0.917** | 0.938 |
-| 25 | IDM-OE | 15/24 | 14/18 | 0.701 | 0.819 |
-| 25 | **PI-Koopman-CTH (ours)** | 19/24 | 17/18 | 0.868 | **0.940** |
-| 25 | **PI-Koopman-IDM (ours)** | 16/24 | 16/18 | 0.778 | 0.847 |
-
-### 4. Response under observation noise
+### 3. Response under observation noise
 
 Run experiment 1 first. For each simulated follower and physical prior, the algorithm selects the configuration with the lowest mean prediction score on the other eleven followers. All methods use the same 7 s histories at 10 Hz, three origins and three noise seeds. Gap noise has SD 0.2 m and each vehicle’s speed noise has SD 0.1 m. Absolute speeds are bounded below by zero before computing relative speed.
 
@@ -180,6 +161,21 @@ Mean fitting time (+ forecast time), in milliseconds.
 | LSTM | 8635.98 (+5.66) | 10809.42 (+9.17) | 4163.01 (+10.00) |
 | **PI-Koopman-CTH (ours)** | 15.47 (+0.07) | 17.20 (+0.08) | — |
 | **PI-Koopman-IDM (ours)** | 23.06 (+0.08) | 23.71 (+0.10) | — |
+
+### 4. Downstream example: ACC and human-driver recognition
+
+Fit the first 15 s of each CATS-CF encounter and score the variance of the velocity-integral residual. The classification threshold is selected on the other runs.
+
+```sh
+python -m scripts.run_experiment recognition
+```
+
+| Hz | Model | ACC correct | Human correct | Balanced accuracy | AUC |
+| --- | --- | --- | --- | --- | --- |
+| 10 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
+| 10 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
+| 25 | PI-Koopman-CTH | 19/24 | 17/18 | 0.868 | 0.940 |
+| 25 | PI-Koopman-IDM | 16/24 | 16/18 | 0.778 | 0.847 |
 
 ## License
 

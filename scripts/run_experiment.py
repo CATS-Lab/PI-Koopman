@@ -13,7 +13,7 @@ def run(module, *args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("experiment", choices=["duration", "rate", "recognition", "noise", "timing"])
+    parser.add_argument("experiment", choices=["duration", "rate", "noise", "timing", "recognition"])
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
     args = parser.parse_args()
     if args.experiment in ("noise", "timing"):

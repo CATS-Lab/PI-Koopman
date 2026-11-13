@@ -201,7 +201,8 @@ def run_rate(rate, out):
                 flush=True,
             )
             fitted = helpers.fit_pi_models(t, z, u)
-            for name, item in fitted.items():
+            for name in helpers.PI_CONFIGS:
+                item = fitted[name]
                 residual_rows = ordinary_residuals(t, z, item["model"])
                 if len(residual_rows) != 35:
                     raise ValueError(
